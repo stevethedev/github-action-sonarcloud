@@ -34,18 +34,6 @@ const main = async () => {
 
   // get the list of tags
   await exec("git", ["fetch", "--tags"]);
-  const { stdout } = await getExecOutput("git", ["tag", "-l"]);
-  const tags = stdout
-    .split("\n")
-    .map((x) => x.trim())
-    .filter((x) => semver.valid(x));
-  const maxTag = semver.maxSatisfying(tags, "*");
-  const maxTagMajor = semver.major(maxTag);
-  const maxTagMinor = semver.minor(maxTag);
-
-  if (versionMajor >= maxTagMajor && versionMinor >= maxTagMinor) {
-    await exec("git", ["tag", "-f", "latest"]);
-  }
 
   await exec("git", ["checkout", "--detach"]);
   await exec("git", ["add", "--force", "dist"]);
