@@ -50,4 +50,4 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: GitHub/SonarCloud Integration
-        uses: stevethedev/github-action-sonarcloud@latest
+        uses: stevethedev/github-action-sonarcloud@0.1
