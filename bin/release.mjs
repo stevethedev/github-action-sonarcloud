@@ -1,6 +1,6 @@
 import { exec, getExecOutput } from "@actions/exec";
 import path from "path";
-import packageJson from "../package.json";
+import packageJson from "../package.json" assert { type: "json" };
 
 const { version } = packageJson;
 const tag = `v${version}`;
