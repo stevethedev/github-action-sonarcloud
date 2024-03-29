@@ -4,12 +4,12 @@ import semver from "semver";
 import packageJson from "../package.json" assert { type: "json" };
 
 const { version } = packageJson;
-const major = semver.major(version);
-const minor = semver.minor(version);
+const versionMajor = semver.major(version);
+const versionMinor = semver.minor(version);
 
 const tag = `v${version}`;
-const minorTag = `v${major}.${minor}`;
-const releaseLine = `v${major}`;
+const minorTag = `v${versionMajor}.${versionMinor}`;
+const releaseLine = `v${versionMajor}`;
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 process.chdir(path.join(__dirname, ".."));
@@ -40,7 +40,10 @@ const main = async () => {
     .map((x) => x.trim())
     .filter((x) => semver.valid(x));
   const maxTag = semver.maxSatisfying(tags, "*");
-  if (semver.lt(maxTag, minorTag)) {
+  const maxTagMajor = semver.major(maxTag);
+  const maxTagMinor = semver.minor(maxTag);
+
+  if (versionMajor >= maxTagMajor && versionMinor >= maxTagMinor) {
     await exec("git", ["tag", "-f", "latest"]);
   }
 
