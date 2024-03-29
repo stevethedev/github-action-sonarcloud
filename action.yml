@@ -1,0 +1,11 @@
+name: GitHub/SonarCloud Integration
+description: A GitHub action to automate SonarCloud API interactions
+runs:
+  using: "node20"
+  main: "dist/index.js"
+branding:
+  icon: "monitor"
+  color: "purple"
+inputs:
+
+outputs:
