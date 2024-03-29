@@ -1,9 +1,16 @@
-import { setOutput } from "@actions/core";
-import type { Response } from "./main";
+import { setOutput, getInput } from "@actions/core";
+import type { MainResponse, MainOptions } from "./main";
 import { main } from "./main";
 
-main()
-  .then((outputs: Response): void => {
+const mainOptions: MainOptions = {
+  sonarUrl:
+    getInput("sonarUrl", { required: false }) ?? "https://sonarcloud.io",
+  sonarToken: getInput("sonarToken", { required: true }),
+  fetch: global.fetch,
+};
+
+main(mainOptions)
+  .then((outputs: MainResponse): void => {
     Object.entries(outputs).forEach(([name, value]) => {
       setOutput(name, value);
     });
