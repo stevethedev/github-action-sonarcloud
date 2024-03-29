@@ -52,7 +52,7 @@ describe("factory", () => {
 
     expect(fetch).toHaveBeenCalledWith("http://localhost/url?key=value", {
       method: "GET",
-      headers: new Headers({ authorization: "Bearer token "}),
+      headers: new Headers({ authorization: "Bearer token " }),
     });
   });
 });

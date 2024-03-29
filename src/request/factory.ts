@@ -31,7 +31,10 @@ export const factory = ({
     };
   };
 
-  const getFullUrl = (url: URL | string, parameters: Record<string, string>): string => {
+  const getFullUrl = (
+    url: URL | string,
+    parameters: Record<string, string>,
+  ): string => {
     const fullUrl = new URL(url, baseUrl);
     Object.entries(parameters).forEach(([key, value]) => {
       fullUrl.searchParams.append(key, value);
@@ -43,6 +46,9 @@ export const factory = ({
     url: URL | string,
     { parameters = {}, ...requestInit }: RequestOptions = {},
   ): Promise<Response> => {
-    return await fetch(getFullUrl(url, parameters), getRequestInit(requestInit));
+    return await fetch(
+      getFullUrl(url, parameters),
+      getRequestInit(requestInit),
+    );
   };
 };

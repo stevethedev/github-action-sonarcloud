@@ -1,5 +1,5 @@
-import {isObject} from "@/types/object";
-import {isBoolean} from "@/types/boolean";
+import { isObject } from "@/types/object";
+import { isBoolean } from "@/types/boolean";
 
 export interface Result {
   valid: boolean;
@@ -17,4 +17,4 @@ export const transform = (data: unknown): Result => {
   }
 
   return { valid };
-}
+};
