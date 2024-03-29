@@ -2,7 +2,12 @@ name: Apply Changesets
 on:
   workflow_dispatch:
 
-  push:
+  workflow_run:
+    workflows:
+      - Automated Testing
+      - Code Check
+    types:
+      - completed
     branches:
       - main
 
@@ -33,5 +38,7 @@ jobs:
 
       - name: Open Versioning PR
         uses: changesets/action@v1
+        with:
+          publish: npm run publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

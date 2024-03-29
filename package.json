@@ -12,10 +12,12 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "prepare": "husky",
+    "release": "node ./bin/release.mjs",
     "test": "jest --coverage",
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
+    "@actions/exec": "^1.1.1",
     "@changesets/cli": "^2.27.1",
     "@types/jest": "^29.5.12",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
