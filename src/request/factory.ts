@@ -1,12 +1,16 @@
 export type RequestFn = (
   url: string,
-  options: RequestInit,
+  options: RequestOptions,
 ) => Promise<Response>;
+
+interface RequestOptions extends RequestInit {
+  parameters?: Record<string, string>;
+}
 
 export interface Options {
   baseUrl: string;
   token: string;
-  fetch?: RequestFn;
+  fetch?: typeof global.fetch;
 }
 
 export const factory = ({
@@ -27,14 +31,18 @@ export const factory = ({
     };
   };
 
-  const getFullUrl = (url: URL | string): string => {
-    return new URL(url, baseUrl).toString();
+  const getFullUrl = (url: URL | string, parameters: Record<string, string>): string => {
+    const fullUrl = new URL(url, baseUrl);
+    Object.entries(parameters).forEach(([key, value]) => {
+      fullUrl.searchParams.append(key, value);
+    });
+    return fullUrl.toString();
   };
 
   return async (
     url: URL | string,
-    requestInit: RequestInit = {},
+    { parameters = {}, ...requestInit }: RequestOptions = {},
   ): Promise<Response> => {
-    return await fetch(getFullUrl(url), getRequestInit(requestInit));
+    return await fetch(getFullUrl(url, parameters), getRequestInit(requestInit));
   };
 };

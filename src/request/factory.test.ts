@@ -36,4 +36,23 @@ describe("factory", () => {
       }),
     });
   });
+
+  it("should append parameters", async () => {
+    const fetch = jest.fn();
+    const request = factory({
+      baseUrl: "http://localhost",
+      token: "token",
+      fetch,
+    });
+
+    await request("/url", {
+      method: "GET",
+      parameters: { key: "value" },
+    });
+
+    expect(fetch).toHaveBeenCalledWith("http://localhost/url?key=value", {
+      method: "GET",
+      headers: new Headers({ authorization: "Bearer token "}),
+    });
+  });
 });
