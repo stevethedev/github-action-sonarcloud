@@ -2,8 +2,10 @@
   "name": "github-action-sonarcloud",
   "version": "0.0.0",
   "description": "This action integrates SonarCloud feedback into a GitHub Repository.",
-  "scripts": {},
-  "dependencies": {},
-  "devDependencies": {},
-  "peerDependencies": {}
+  "scripts": {
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.0.11"
+  }
 }
