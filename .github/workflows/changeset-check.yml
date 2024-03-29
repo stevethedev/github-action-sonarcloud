@@ -1,0 +1,77 @@
+name: Check Changesets
+on:
+  workflow_dispatch:
+
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: write
+  packages: read
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-changeset:
+    name: Check for Changesets
+    runs-on: ubuntu-latest
+    outputs:
+      versions_json: ${{ steps.get-versions.outputs.versions_json }}
+      has_changeset: ${{ steps.get-changeset.outputs.hasChangesets }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+          ref: refs/heads/main
+
+      - name: Checkout PR branch
+        run: |
+          git fetch origin "${{ github.event.pull_request.head.ref }}:${{ github.event.pull_request.head.ref }}"
+          git checkout "${{ github.event.pull_request.head.ref }}"
+
+      - name: Install dependencies
+        run: npm ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update versions without PR
+        id: get-changeset
+        run: |
+          if npx changeset status > /dev/null ; then
+            echo "Changeset status is not empty"
+            echo "hasChangesets=true" >> "$GITHUB_OUTPUT"
+            npx changeset version
+          else
+            echo "Changeset status is empty"
+            echo "hasChangesets=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Notify of extant changeset
+        if: steps.get-changeset.outputs.hasChangesets == 'true'
+        uses: mshick/add-pr-comment@v2
+        with:
+          message-id: changeset-notice
+          message: |
+            ## ✅ This PR includes a changeset!
+
+            This Pull Request will not trigger a new `latest` release upon merge into the `main` branch.
+
+      - name: Notify of missing changeset
+        if: steps.get-changeset.outputs.hasChangesets != 'true'
+        uses: mshick/add-pr-comment@v2
+        with:
+          message-id: changeset-notice
+          message: |
+            ## ⚠️ This PR is missing a changeset!
+
+            This Pull Request will trigger a new `latest` release upon merge. If this is unintentional, run
+            `npx changeset add` from the root directory of this repository to generate a new changeset. If
+            you do not want to trigger a release but there are no relevant changes to include, you can run
+            `npx changeset add --empty` to create an empty changeset without bumping version numbers.
