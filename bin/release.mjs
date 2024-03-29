@@ -1,10 +1,15 @@
 import { exec, getExecOutput } from "@actions/exec";
 import path from "path";
+import semver from "semver";
 import packageJson from "../package.json" assert { type: "json" };
 
 const { version } = packageJson;
+const major = semver.major(version);
+const minor = semver.minor(version);
+
 const tag = `v${version}`;
-const releaseLine = `v${version.split(".")[0]}`;
+const minorTag = `v${major}.${minor}`;
+const releaseLine = `v${major}`;
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 process.chdir(path.join(__dirname, ".."));
@@ -27,11 +32,24 @@ const main = async () => {
     throw new Error(`git ls-remote exited with ${exitCode}:\n${stderr}`);
   }
 
+  // get the list of tags
+  await exec("git", ["fetch", "--tags"]);
+  const { stdout } = await getExecOutput("git", ["tag", "-l"]);
+  const tags = stdout
+    .split("\n")
+    .map((x) => x.trim())
+    .filter((x) => semver.valid(x));
+  const maxTag = semver.maxSatisfying(tags, "*");
+  if (semver.lt(maxTag, minorTag)) {
+    await exec("git", ["tag", "-f", "latest"]);
+  }
+
   await exec("git", ["checkout", "--detach"]);
   await exec("git", ["add", "--force", "dist"]);
   await exec("git", ["commit", "-m", tag]);
 
   await exec("changeset", ["tag"]);
+  await exec("git", ["tag", "-f", minorTag]);
 
   await exec("git", [
     "push",
