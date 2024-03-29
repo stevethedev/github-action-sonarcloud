@@ -13,6 +13,7 @@
     "lint:fix": "eslint --fix .",
     "prepare": "husky",
     "release": "node ./bin/release.mjs",
+    "prerelease": "npm run build",
     "test": "jest --coverage",
     "type-check": "tsc --noEmit"
   },
