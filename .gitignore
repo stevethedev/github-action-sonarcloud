@@ -1,0 +1,7 @@
+# Project Files
+*.iml
+.idea/
+.vscode/
+
+# Node Files
+node_modules/
