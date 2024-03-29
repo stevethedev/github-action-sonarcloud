@@ -3,15 +3,17 @@
   "version": "0.0.0",
   "description": "This action integrates SonarCloud feedback into a GitHub Repository.",
   "scripts": {
-    "check": "npm-run-all format:check",
+    "check": "npm-run-all format:check type-check",
     "fix": "npm-run-all format",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "type-check": "tsc --noEmit"
   },
   "devDependencies": {
     "husky": "^9.0.11",
     "npm-run-all": "^4.1.5",
-    "prettier": "^3.2.5"
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.3"
   }
 }
