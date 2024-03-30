@@ -53,6 +53,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: GitHub/SonarCloud Integration
-        uses: stevethedev/github-action-sonarcloud@v0.1
+        uses: stevethedev/github-action-sonarcloud@v0.2
         with:
           sonarToken: ${{ secrets.SONAR_TOKEN }}
