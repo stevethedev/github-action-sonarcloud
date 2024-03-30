@@ -5,7 +5,6 @@ on:
   workflow_run:
     workflows:
       - Automated Testing
-      - Code Check
     types:
       - completed
     branches:
