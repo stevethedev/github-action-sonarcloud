@@ -15,19 +15,19 @@ export interface GateData {
 const parseComparator = (comparator: string): string => {
   switch (comparator) {
     case "GT":
-      return ">";
+      return "must be greater than";
     case "LT":
-      return "<";
+      return "must be less than";
     case "EQ":
-      return "=";
+      return "must be equal to";
     case "NE":
-      return "!=";
+      return "must not be equal to";
     case "GE":
     case "GTE":
-      return ">=";
+      return "must be at least";
     case "LE":
     case "LTE":
-      return "<=";
+      return "must be no more than";
     default:
       console.warn("Unknown comparator: %s", comparator);
       return comparator;
@@ -41,9 +41,46 @@ const parseTitle = (metricKey: string): string => {
     .join(" ");
 };
 
+const gradedConditions: Partial<Record<string, string>> = {
+  "1": "A",
+  "2": "B",
+  "3": "C",
+  "4": "D",
+  "5": "E",
+};
+
+const parseGradedValue = (value: string): string => {
+  const gradedValue = gradedConditions[value];
+  return gradedValue ?? "(unknown grade)";
+};
+
+const parsePercentValue = (value: string): string => `${value}%`;
+
+const isGradedValue = (condition: Condition): boolean =>
+  condition.metricKey.endsWith("rating");
+const isPercentValue = (condition: Condition): boolean =>
+  condition.metricKey === "security_hotspots_reviewed";
+
+const getValueMapper = (condition: Condition) => {
+  if (isGradedValue(condition)) {
+    return parseGradedValue;
+  }
+
+  if (isPercentValue(condition)) {
+    return parsePercentValue;
+  }
+
+  return (value: string) => value;
+};
+
 const parseDescription = (condition: Condition): string => {
   const comparator = parseComparator(condition.comparator);
-  return `${condition.actualValue} ${comparator} ${condition.errorThreshold}`;
+  const values = [condition.actualValue, condition.errorThreshold];
+
+  const valueMapper = getValueMapper(condition);
+  const [actualValue, errorThreshold] = values.map(valueMapper);
+
+  return `Measured score ${actualValue} ${comparator} ${errorThreshold}.`;
 };
 
 export const transform = (data: unknown): Result => {
