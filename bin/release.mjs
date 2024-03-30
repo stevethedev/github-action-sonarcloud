@@ -8,8 +8,6 @@ const versionMajor = semver.major(version);
 const versionMinor = semver.minor(version);
 
 const tag = `v${version}`;
-const minorTag = `v${versionMajor}.${versionMinor}`;
-const releaseLine = `v${versionMajor}`;
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 process.chdir(path.join(__dirname, ".."));
@@ -40,14 +38,20 @@ const main = async () => {
   await exec("git", ["commit", "-m", tag]);
 
   await exec("changeset", ["tag"]);
-  await exec("git", ["tag", "-f", minorTag]);
 
   await exec("git", [
     "push",
     "--force",
     "--follow-tags",
     "origin",
-    `HEAD:refs/heads/${releaseLine}`,
+    `HEAD:refs/heads/v${versionMajor}`,
+  ]);
+  await exec("git", [
+    "push",
+    "--force",
+    "--follow-tags",
+    "origin",
+    `HEAD:refs/heads/v${versionMajor}.${versionMinor}`,
   ]);
 };
 
