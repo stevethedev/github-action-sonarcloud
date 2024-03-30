@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.2.0
+
+### Minor Changes
+
+- c6e5843: Add comment-writing and gate-checking
+
 ## 0.1.4
 
 ### Patch Changes
