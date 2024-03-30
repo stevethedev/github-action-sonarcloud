@@ -7,9 +7,21 @@ branding:
   icon: "monitor"
   color: "purple"
 inputs:
-  sonarUrl:
-    description: "The SonarCloud URL"
-    default: "https://sonarcloud.io"
+  commentId:
+    description: "The comment ID (numeric)"
+    required: false
+  githubToken:
+    description: "The GitHub token"
+    required: true
+  sonarProjectFile:
+    description: "The SonarCloud project file"
+    default: "./sonar-project.properties"
+  sonarProjectKey:
+    description: "The SonarCloud project key (read from the `sonarProjectFile` by default)"
+    required: false
   sonarToken:
     description: "The SonarCloud bearer token"
     required: true
+  sonarUrl:
+    description: "The SonarCloud URL"
+    default: "https://sonarcloud.io"
