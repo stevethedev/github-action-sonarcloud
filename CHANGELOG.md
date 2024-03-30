@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.1.4
+
+### Patch Changes
+
+- 9229c2b: Added logging line to validate SonarCloud credentials
+
 ## 0.1.3
 
 ### Patch Changes
