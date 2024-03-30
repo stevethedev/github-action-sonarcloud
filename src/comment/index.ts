@@ -57,7 +57,7 @@ export const startComment = ({ octokit, githubContext }: Options): Comment => {
     });
 
     const comment = data.find((comment) =>
-      comment.body?.includes(QUALITY_GATE_COMMENT),
+      comment.body_html?.includes(QUALITY_GATE_COMMENT),
     );
 
     return comment?.id;

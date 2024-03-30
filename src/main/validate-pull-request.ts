@@ -28,11 +28,11 @@ export const validatePullRequest = async (
       ? status.pass("Quality Gate passed")
       : status.fail("Quality Gate failed"),
   );
-  const commentBodyComponents = unorderedList(
-    ...projectStatus.conditions.map(({ isOk, description }) =>
+  const commentBullets = projectStatus.conditions.map(
+    ({ isOk, description }) =>
       isOk ? status.pass(description) : status.fail(description),
-    ),
   );
+  const commentBodyComponents = unorderedList(...commentBullets);
 
   const sonarUrl = sonarRequest.getUrl("summary/new_code", {
     id: projectKey,
@@ -40,7 +40,7 @@ export const validatePullRequest = async (
   });
   const sonarLink = link("SonarCloud", sonarUrl);
 
-  comment.push(section(commentHeader, sonarLink, ...commentBodyComponents));
+  comment.push(section(commentHeader, sonarLink, commentBodyComponents));
 
   return projectStatus.isOk;
 };
