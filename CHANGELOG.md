@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.2.5
+
+### Patch Changes
+
+- b0e54d9: Set the comment ID on new comments
+
 ## 0.2.4
 
 ### Patch Changes
