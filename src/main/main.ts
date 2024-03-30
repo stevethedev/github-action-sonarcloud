@@ -1,5 +1,5 @@
 import { requestFactory } from "@/request";
-import validate from "@/sonarcloud-api/authentication/validate";
+import { validateCredentials } from "./validate-credentials";
 
 export interface MainOptions {
   sonarUrl: string;
@@ -20,10 +20,8 @@ export const main = async ({
     fetch,
   });
 
-  const validateResult = await validate(sonarRequest);
-  if (!validateResult.valid) {
-    throw new Error("Invalid SonarCloud credentials");
-  }
+  await validateCredentials(sonarRequest);
+  process.stdout.write("Validated SonarCloud credentials\n");
 
   return {};
 };
