@@ -45,6 +45,7 @@ export const startComment = ({
 
   const postComment = async (body: string): Promise<void> => {
     await octokit.rest.issues.createComment({
+      comment_id: commentId,
       issue_number: githubContext.issue.number,
       owner: githubContext.repo.owner,
       repo: githubContext.repo.repo,
