@@ -1,19 +1,34 @@
-import { setOutput, getInput } from "@actions/core";
-import type { MainResponse, MainOptions } from "./main";
+import { getCommentId } from "@/args/comment-id";
+import { getGitHubToken } from "@/args/github-token";
+import { getSonarProjectKey } from "@/args/sonar-project-key";
+import { getSonarToken } from "@/args/sonar-token";
+import { getSonarUrl } from "@/args/sonar-url";
+import { startComment } from "@/comment";
+import { context as githubContext, getOctokit } from "@actions/github";
+import type { MainOptions, MainContext } from "./main";
 import { main } from "./main";
 
 const mainOptions: MainOptions = {
-  sonarUrl:
-    getInput("sonarUrl", { required: false }) ?? "https://sonarcloud.io",
-  sonarToken: getInput("sonarToken", { required: true }),
-  fetch: global.fetch,
+  sonarUrl: getSonarUrl(),
+  sonarToken: getSonarToken(),
+  projectKey: getSonarProjectKey(),
 };
 
-main(mainOptions)
-  .then((outputs: MainResponse): void => {
-    Object.entries(outputs).forEach(([name, value]) => {
-      setOutput(name, value);
-    });
+const mainContext: MainContext = {
+  fetch: global.fetch,
+  comment: startComment({
+    commentId: getCommentId(),
+    octokit: getOctokit(getGitHubToken()),
+    githubContext,
+  }),
+};
+
+main(mainContext, mainOptions)
+  .then((result: boolean): void => {
+    if (!result) {
+      console.error("Quality Gate failed");
+      process.exit(1);
+    }
   })
   .catch((error: unknown): void => {
     console.error(error);
