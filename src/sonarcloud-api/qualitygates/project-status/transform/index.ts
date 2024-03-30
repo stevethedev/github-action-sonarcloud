@@ -15,19 +15,11 @@ export interface GateData {
 const parseComparator = (comparator: string): string => {
   switch (comparator) {
     case "GT":
-      return "must be greater than";
+      return "must be at least";
     case "LT":
-      return "must be less than";
+      return "must be no greater than";
     case "EQ":
       return "must be equal to";
-    case "NE":
-      return "must not be equal to";
-    case "GE":
-    case "GTE":
-      return "must be at least";
-    case "LE":
-    case "LTE":
-      return "must be no more than";
     default:
       console.warn("Unknown comparator: %s", comparator);
       return comparator;

@@ -4,7 +4,6 @@ import type { context, getOctokit } from "@actions/github";
 export interface Options {
   octokit: ReturnType<typeof getOctokit>;
   githubContext: typeof context;
-  commentId?: number;
 }
 
 export interface Comment {
@@ -13,18 +12,16 @@ export interface Comment {
   post: () => Promise<void>;
 }
 
-export const startComment = ({
-  octokit,
-  githubContext,
-  commentId,
-}: Options): Comment => {
+const QUALITY_GATE_COMMENT = "<!-- sonarcloud-quality-gate -->";
+
+export const startComment = ({ octokit, githubContext }: Options): Comment => {
   const parts: string[] = [];
 
   const push = (body: string): void => {
     parts.push(body);
   };
 
-  const collect = (): string => parts.join("\n\n");
+  const collect = (): string => [...parts, QUALITY_GATE_COMMENT].join("\n\n");
 
   const updateComment = async (
     commentId: number,
@@ -45,7 +42,6 @@ export const startComment = ({
 
   const postComment = async (body: string): Promise<void> => {
     await octokit.rest.issues.createComment({
-      comment_id: commentId,
       issue_number: githubContext.issue.number,
       owner: githubContext.repo.owner,
       repo: githubContext.repo.repo,
@@ -53,8 +49,23 @@ export const startComment = ({
     });
   };
 
+  const findComment = async (): Promise<number | undefined> => {
+    const { data } = await octokit.rest.issues.listComments({
+      issue_number: githubContext.issue.number,
+      owner: githubContext.repo.owner,
+      repo: githubContext.repo.repo,
+    });
+
+    const comment = data.find((comment) =>
+      comment.body?.includes(QUALITY_GATE_COMMENT),
+    );
+
+    return comment?.id;
+  };
+
   const post = async (): Promise<void> => {
     const body = collect();
+    const commentId = findComment();
 
     if (isNumber(commentId) && (await updateComment(commentId, body))) {
       return;

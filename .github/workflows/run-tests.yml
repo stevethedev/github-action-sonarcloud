@@ -57,6 +57,5 @@ jobs:
       - name: GitHub/SonarCloud Integration
         uses: stevethedev/github-action-sonarcloud@v0.2
         with:
-          commentId: 123456789
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           sonarToken: ${{ secrets.SONAR_TOKEN }}
