@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.2.1
+
+### Patch Changes
+
+- 245a468: Fixed a bug where comments could not be created
+
 ## 0.2.0
 
 ### Minor Changes
