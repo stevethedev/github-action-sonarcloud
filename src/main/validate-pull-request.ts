@@ -1,5 +1,6 @@
 import type { Comment } from "@/comment";
 import { header } from "@/comment/header";
+import { link } from "@/comment/link";
 import { status } from "@/comment/status";
 import getProjectStatus from "@/sonarcloud-api/qualitygates/project-status";
 import type { RequestFn } from "@/request/factory";
@@ -34,7 +35,13 @@ export const validatePullRequest = async (
       ),
   );
 
-  comment.push(section(commentHeader, ...commentBodyComponents));
+  const sonarUrl = sonarRequest.getUrl("summary/new_code", {
+    id: projectKey,
+    pullRequest: String(pullRequest),
+  });
+  const sonarLink = link("SonarCloud", sonarUrl);
+
+  comment.push(section(commentHeader, sonarLink, ...commentBodyComponents));
 
   return projectStatus.isOk;
 };
