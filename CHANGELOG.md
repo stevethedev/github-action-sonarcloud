@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.2.3
+
+### Patch Changes
+
+- 4c78b11: Fix a bug where the pull-request value isn't being read
+
 ## 0.2.2
 
 ### Patch Changes
