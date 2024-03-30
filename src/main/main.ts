@@ -1,7 +1,7 @@
 import { header } from "@/comment/header";
 import { validatePullRequest } from "@/main/validate-pull-request";
 import { requestFactory } from "@/request";
-import { isString } from "@/types/string";
+import { isNumber } from "@/types/number";
 import { validateCredentials } from "./validate-credentials";
 import type { Comment } from "@/comment";
 
@@ -13,7 +13,7 @@ export interface MainOptions {
 }
 
 export interface MainContext {
-  pullRequest?: string;
+  pullRequest?: number;
   fetch: typeof global.fetch;
   comment: Comment;
 }
@@ -36,7 +36,7 @@ export const main = async (
     return false;
   }
 
-  const isPullRequestValid = isString(pullRequest)
+  const isPullRequestValid = isNumber(pullRequest)
     ? await validatePullRequest(sonarRequest, comment, {
         projectKey,
         pullRequest,

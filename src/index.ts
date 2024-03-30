@@ -21,6 +21,7 @@ const mainContext: MainContext = {
     octokit: getOctokit(getGitHubToken()),
     githubContext,
   }),
+  pullRequest: githubContext.payload.pull_request?.number,
 };
 
 main(mainContext, mainOptions)

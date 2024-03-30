@@ -7,7 +7,7 @@ import { section } from "@/comment/section";
 
 export interface Options {
   projectKey: string;
-  pullRequest: string;
+  pullRequest: number;
 }
 
 export const validatePullRequest = async (
@@ -17,7 +17,7 @@ export const validatePullRequest = async (
 ): Promise<boolean> => {
   const projectStatus = await getProjectStatus(sonarRequest, {
     projectKey,
-    pullRequest,
+    pullRequest: String(pullRequest),
   });
 
   const commentHeader = header(
