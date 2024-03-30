@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.2.10
+
+### Patch Changes
+
+- 6309f88: Fix comment-lookup functionality
+
 ## 0.2.9
 
 ### Patch Changes

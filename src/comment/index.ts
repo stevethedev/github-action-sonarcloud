@@ -57,7 +57,7 @@ export const startComment = ({ octokit, githubContext }: Options): Comment => {
     });
 
     const comment = data.find((comment) =>
-      comment.body_html?.includes(QUALITY_GATE_COMMENT),
+      comment.body?.includes(QUALITY_GATE_COMMENT),
     );
 
     return comment?.id;
@@ -65,7 +65,7 @@ export const startComment = ({ octokit, githubContext }: Options): Comment => {
 
   const post = async (): Promise<void> => {
     const body = collect();
-    const commentId = findComment();
+    const commentId = await findComment();
 
     if (isNumber(commentId) && (await updateComment(commentId, body))) {
       return;
