@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.2.9
+
+### Patch Changes
+
+- 7cbe651: Fix the comment body list
+
 ## 0.2.8
 
 ### Patch Changes
