@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.1.3
+
+### Patch Changes
+
+- 6bd95ed: Fixed code coverage collection
+
 ## 0.1.2
 
 ### Patch Changes
