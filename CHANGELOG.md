@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.2.8
+
+### Patch Changes
+
+- 9e9157e: Update the way the status is reported
+
 ## 0.2.7
 
 ### Patch Changes

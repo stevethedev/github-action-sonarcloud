@@ -8,23 +8,8 @@ export interface Result {
 
 export interface GateData {
   isOk: boolean;
-  title: string;
   description: string;
 }
-
-const parseComparator = (comparator: string): string => {
-  switch (comparator) {
-    case "GT":
-      return "must be at least";
-    case "LT":
-      return "must be no greater than";
-    case "EQ":
-      return "must be equal to";
-    default:
-      console.warn("Unknown comparator: %s", comparator);
-      return comparator;
-  }
-};
 
 const parseTitle = (metricKey: string): string => {
   const words = metricKey.split("_");
@@ -66,13 +51,11 @@ const getValueMapper = (condition: Condition) => {
 };
 
 const parseDescription = (condition: Condition): string => {
-  const comparator = parseComparator(condition.comparator);
-  const values = [condition.actualValue, condition.errorThreshold];
-
+  const title = parseTitle(condition.metricKey);
   const valueMapper = getValueMapper(condition);
-  const [actualValue, errorThreshold] = values.map(valueMapper);
+  const actualValue = valueMapper(condition.actualValue);
 
-  return `Measured score ${actualValue} ${comparator} ${errorThreshold}.`;
+  return `${title} (${actualValue})`;
 };
 
 export const transform = (data: unknown): Result => {
@@ -83,7 +66,6 @@ export const transform = (data: unknown): Result => {
     conditions: projectStatus.conditions.map((condition) => ({
       ...condition,
       isOk: condition.status === "OK",
-      title: parseTitle(condition.metricKey),
       description: parseDescription(condition),
     })),
   };
