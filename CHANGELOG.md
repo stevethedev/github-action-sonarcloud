@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.2.2
+
+### Patch Changes
+
+- 37be3bc: Added documentation to indicate the required permissions to run the action
+
 ## 0.2.1
 
 ### Patch Changes
