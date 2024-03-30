@@ -1,27 +1,49 @@
+import { header } from "@/comment/header";
+import { validatePullRequest } from "@/main/validate-pull-request";
 import { requestFactory } from "@/request";
+import { isNumber } from "@/types/number";
 import { validateCredentials } from "./validate-credentials";
+import type { Comment } from "@/comment";
 
 export interface MainOptions {
+  commentId?: number;
+  projectKey: string;
   sonarUrl: string;
   sonarToken: string;
-  fetch: typeof global.fetch;
 }
 
-export interface MainResponse {}
+export interface MainContext {
+  pullRequest?: number;
+  fetch: typeof global.fetch;
+  comment: Comment;
+}
 
-export const main = async ({
-  sonarUrl,
-  sonarToken,
-  fetch,
-}: MainOptions): Promise<MainResponse> => {
+export const main = async (
+  { fetch, comment, pullRequest }: MainContext,
+  { sonarToken, sonarUrl, projectKey }: MainOptions,
+): Promise<boolean> => {
   const sonarRequest = requestFactory({
     baseUrl: sonarUrl,
     token: sonarToken,
     fetch,
   });
 
-  await validateCredentials(sonarRequest);
-  process.stdout.write("Validated SonarCloud credentials\n");
+  comment.push(header(1, "Quality Gate Status"));
 
-  return {};
+  const isCredentialsValid = await validateCredentials(sonarRequest, comment);
+  if (!isCredentialsValid) {
+    await comment.post();
+    return false;
+  }
+
+  const isPullRequestValid = isNumber(pullRequest)
+    ? await validatePullRequest(sonarRequest, comment, {
+        projectKey,
+        pullRequest,
+      })
+    : true;
+
+  await comment.post();
+
+  return isPullRequestValid;
 };

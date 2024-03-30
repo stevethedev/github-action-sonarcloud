@@ -1,5 +1,35 @@
 # github-action-sonarcloud
 
+## 0.2.4
+
+### Patch Changes
+
+- 384a446: Added a link to the Pull Request analysis to the generated comment
+
+## 0.2.3
+
+### Patch Changes
+
+- 4c78b11: Fix a bug where the pull-request value isn't being read
+
+## 0.2.2
+
+### Patch Changes
+
+- 37be3bc: Added documentation to indicate the required permissions to run the action
+
+## 0.2.1
+
+### Patch Changes
+
+- 245a468: Fixed a bug where comments could not be created
+
+## 0.2.0
+
+### Minor Changes
+
+- c6e5843: Add comment-writing and gate-checking
+
 ## 0.1.4
 
 ### Patch Changes
