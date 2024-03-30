@@ -1,4 +1,3 @@
-import { getCommentId } from "@/args/comment-id";
 import { getGitHubToken } from "@/args/github-token";
 import { getSonarProjectKey } from "@/args/sonar-project-key";
 import { getSonarToken } from "@/args/sonar-token";
@@ -17,7 +16,6 @@ const mainOptions: MainOptions = {
 const mainContext: MainContext = {
   fetch: global.fetch,
   comment: startComment({
-    commentId: getCommentId(),
     octokit: getOctokit(getGitHubToken()),
     githubContext,
   }),
