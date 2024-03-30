@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.2.6
+
+### Patch Changes
+
+- 7e26892: Fix percentage parsing
+
 ## 0.2.5
 
 ### Patch Changes
