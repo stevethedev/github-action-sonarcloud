@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.2.4
+
+### Patch Changes
+
+- 384a446: Added a link to the Pull Request analysis to the generated comment
+
 ## 0.2.3
 
 ### Patch Changes

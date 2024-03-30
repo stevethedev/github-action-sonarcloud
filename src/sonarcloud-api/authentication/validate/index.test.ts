@@ -1,11 +1,14 @@
+import type { RequestFn } from "@/request/factory";
 import validate from ".";
 
 describe("validate", () => {
+  const asRequest = (fn: jest.Mock) => fn as unknown as RequestFn;
+
   it("should return valid true", async () => {
     const request = jest.fn().mockResolvedValue({
       json: jest.fn().mockResolvedValue({ valid: true }),
     });
-    const result = await validate(request);
+    const result = await validate(asRequest(request));
     expect(result).toEqual({ valid: true });
   });
 
@@ -13,7 +16,7 @@ describe("validate", () => {
     const request = jest.fn().mockResolvedValue({
       json: jest.fn().mockResolvedValue({ valid: false }),
     });
-    const result = await validate(request);
+    const result = await validate(asRequest(request));
     expect(result).toEqual({ valid: false });
   });
 
@@ -21,7 +24,7 @@ describe("validate", () => {
     const request = jest
       .fn()
       .mockResolvedValue({ json: jest.fn().mockResolvedValue("string") });
-    await expect(validate(request)).rejects.toThrow(
+    await expect(validate(asRequest(request))).rejects.toThrow(
       "Invalid data: data is not an object",
     );
   });
@@ -30,7 +33,7 @@ describe("validate", () => {
     const request = jest.fn().mockResolvedValue({
       json: jest.fn().mockResolvedValue({ valid: "string" }),
     });
-    await expect(validate(request)).rejects.toThrow(
+    await expect(validate(asRequest(request))).rejects.toThrow(
       "Invalid data: data.valid is not a boolean",
     );
   });
@@ -39,7 +42,7 @@ describe("validate", () => {
     const request = jest.fn().mockResolvedValue({
       json: jest.fn().mockRejectedValue(new Error("Invalid JSON")),
     });
-    await expect(validate(request)).rejects.toThrow(
+    await expect(validate(asRequest(request))).rejects.toThrow(
       "Expected JSON response from SonarCloud API",
     );
   });

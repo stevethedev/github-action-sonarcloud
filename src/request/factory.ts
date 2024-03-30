@@ -1,7 +1,8 @@
-export type RequestFn = (
-  url: string,
-  options: RequestOptions,
-) => Promise<Response>;
+export interface RequestFn {
+  (url: string, options: RequestOptions): Promise<Response>;
+
+  getUrl(url: string, parameters: Record<string, string>): string;
+}
 
 interface RequestOptions extends RequestInit {
   parameters?: Record<string, string>;
@@ -42,7 +43,7 @@ export const factory = ({
     return fullUrl.toString();
   };
 
-  return async (
+  const requestFn = async (
     url: URL | string,
     { parameters = {}, ...requestInit }: RequestOptions = {},
   ): Promise<Response> => {
@@ -51,4 +52,8 @@ export const factory = ({
       getRequestInit(requestInit),
     );
   };
+
+  requestFn.getUrl = getFullUrl;
+
+  return requestFn;
 };
