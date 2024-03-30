@@ -26,22 +26,40 @@ export const startComment = ({
 
   const collect = (): string => parts.join("\n\n");
 
-  const post = async (): Promise<void> => {
-    if (isNumber(commentId)) {
+  const updateComment = async (
+    commentId: number,
+    body: string,
+  ): Promise<boolean> => {
+    try {
       await octokit.rest.issues.updateComment({
         comment_id: commentId,
         owner: githubContext.repo.owner,
         repo: githubContext.repo.repo,
-        body: collect(),
+        body: body,
       });
-      return;
+      return true;
+    } catch (err) {
+      return false;
     }
+  };
+
+  const postComment = async (body: string): Promise<void> => {
     await octokit.rest.issues.createComment({
       issue_number: githubContext.issue.number,
       owner: githubContext.repo.owner,
       repo: githubContext.repo.repo,
-      body: collect(),
+      body,
     });
+  };
+
+  const post = async (): Promise<void> => {
+    const body = collect();
+
+    if (isNumber(commentId) && (await updateComment(commentId, body))) {
+      return;
+    }
+
+    await postComment(body);
   };
 
   return { push, collect, post };
