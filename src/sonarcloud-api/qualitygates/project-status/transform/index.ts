@@ -59,7 +59,7 @@ const parsePercentValue = (value: string): string => `${value}%`;
 const isGradedValue = (condition: Condition): boolean =>
   condition.metricKey.endsWith("rating");
 const isPercentValue = (condition: Condition): boolean =>
-  condition.metricKey === "security_hotspots_reviewed";
+  condition.metricKey.endsWith("security_hotspots_reviewed");
 
 const getValueMapper = (condition: Condition) => {
   if (isGradedValue(condition)) {
