@@ -1,6 +1,6 @@
 {
   "name": "github-action-sonarcloud",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "description": "This action integrates SonarCloud feedback into a GitHub Repository.",
   "scripts": {
     "build": "node ./bin/build.mjs",
@@ -90,6 +90,9 @@
           "useESM": true
         }
       ]
+    },
+    "globals": {
+      "process.env.SVG_ICON_BASE_URL": "https://svg-icon-base-url/"
     }
   },
   "dependencies": {
