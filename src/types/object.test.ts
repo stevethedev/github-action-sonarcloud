@@ -1,4 +1,4 @@
-import { isObject } from "./object";
+import { hasProperty, isObject } from "./object";
 
 describe("isObject", () => {
   it("should return true for an object", () => {
@@ -39,5 +39,13 @@ describe("isObject", () => {
   it("should return false for undefined", () => {
     const value = undefined;
     expect(isObject(value)).toBe(false);
+  });
+});
+
+describe("hasProperty", () => {
+  it("should return true for an object with the property", () => {
+    const obj = { key: "value" };
+    const prop = "key";
+    expect(hasProperty(obj, prop)).toBe(true);
   });
 });
