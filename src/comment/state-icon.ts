@@ -1,4 +1,4 @@
-declare const SVG_ICON_BASE_URL: string;
+const SVG_ICON_BASE_URL: string = String(process.env.SVG_ICON_BASE_URL);
 
 export const stateIcon = (
   grade: "pass" | "fail",

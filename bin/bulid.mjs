@@ -10,6 +10,6 @@ build({
   platform: "node",
   outfile: "dist/index.js",
   define: {
-    SVG_ICON_BASE_URL: JSON.stringify(SVG_ICON_BASE_URL),
+    "process.env.SVG_ICON_BASE_URL": JSON.stringify(SVG_ICON_BASE_URL),
   },
 });
