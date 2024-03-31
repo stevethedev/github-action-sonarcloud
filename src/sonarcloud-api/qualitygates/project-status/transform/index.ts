@@ -1,6 +1,5 @@
 import { gradeIcon } from "@/comment/grade-icon";
 import { inline } from "@/comment/section";
-import { stateIcon } from "@/comment/state-icon";
 import { hasProperty } from "@/types/object";
 import { parseApiResponse } from "./api-response";
 import type { Condition } from "./condition";
@@ -47,26 +46,16 @@ const isPercentValue = (condition: Condition): boolean =>
   condition.metricKey.endsWith("duplicated_lines_density");
 
 const parseDescription = (condition: Condition): string => {
-  const state = stateIcon(condition.status === "OK" ? "pass" : "fail");
-
   const title = parseTitle(condition.metricKey);
   if (isGradedValue(condition)) {
-    return inline(
-      state,
-      gradeIcon(parseGradedValue(condition.actualValue)),
-      title,
-    );
+    return inline(gradeIcon(parseGradedValue(condition.actualValue)), title);
   }
 
   if (isPercentValue(condition)) {
-    return inline(
-      state,
-      title,
-      `${Math.floor(Number(condition.actualValue))}%`,
-    );
+    return inline(title, `${Math.floor(Number(condition.actualValue))}%`);
   }
 
-  return inline(state, title, `(${condition.actualValue})`);
+  return inline(title, `(${condition.actualValue})`);
 };
 
 export const transform = (data: unknown): Result => {
