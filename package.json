@@ -1,9 +1,9 @@
 {
   "name": "github-action-sonarcloud",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "This action integrates SonarCloud feedback into a GitHub Repository.",
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --platform=node --outfile=dist/index.js",
+    "build": "node ./bin/build.mjs",
     "prebuild": "npm run type-check",
     "check": "npm-run-all format:check type-check lint",
     "fix": "npm-run-all lint:fix format",
