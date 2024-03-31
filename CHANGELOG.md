@@ -1,5 +1,13 @@
 # github-action-sonarcloud
 
+## 0.2.11
+
+### Patch Changes
+
+- 456a7de: Add coverage and line-density as percentage values
+- 5caa52b: Add icons for pass/fail states
+- b7aba0b: Use first-class icons in the generated comments
+
 ## 0.2.10
 
 ### Patch Changes
