@@ -42,7 +42,9 @@ const parseGradedValue = (
 const isGradedValue = (condition: Condition): boolean =>
   condition.metricKey.endsWith("rating");
 const isPercentValue = (condition: Condition): boolean =>
-  condition.metricKey.endsWith("security_hotspots_reviewed");
+  condition.metricKey.endsWith("security_hotspots_reviewed") ||
+  condition.metricKey.endsWith("coverage") ||
+  condition.metricKey.endsWith("duplicated_lines_density");
 
 const parseDescription = (condition: Condition): string => {
   const state = stateIcon(condition.status === "OK" ? "pass" : "fail");
