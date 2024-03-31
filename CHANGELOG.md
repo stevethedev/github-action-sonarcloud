@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.2.13
+
+### Patch Changes
+
+- f1e209a: Remove duplicate status messages
+
 ## 0.2.12
 
 ### Patch Changes
