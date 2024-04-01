@@ -17,14 +17,19 @@ export const validateIssues = async (
   comment: Comment,
   { projectKey, pullRequest }: Options,
 ): Promise<boolean> => {
-  const result = await getProjectIssues(request, { projects: [projectKey] });
+  const result = await getProjectIssues(request, {
+    projects: [projectKey],
+    pullRequest: String(pullRequest),
+  });
   const { issues } = result;
   const toSentenceCase = (str: string) =>
     str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
+  const issueTitle =
+    issues.length === 1 ? `1 Issue` : `${issues.length} Issues`;
   comment.push(
     section(
-      header(2, `${issues.length} SonarCloud Issues`),
+      header(2, issueTitle),
       ...issues.map((issue) => {
         const severity = isString(issue.severity)
           ? toSentenceCase(issue.severity)

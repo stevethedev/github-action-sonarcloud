@@ -33,7 +33,7 @@ export const main = async (
     fetch,
   });
 
-  comment.push(header(1, "Quality Gate Status"));
+  comment.push(header(1, "SonarCloud Analysis"));
 
   const isCredentialsValid = await validateCredentials(sonarRequest, comment);
   if (!isCredentialsValid) {

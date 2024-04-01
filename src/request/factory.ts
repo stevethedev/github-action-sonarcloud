@@ -51,10 +51,9 @@ export const factory = ({
     url: URL | string,
     { parameters = {}, ...requestInit }: RequestOptions = {},
   ): Promise<Response> => {
-    return await fetch(
-      getFullUrl(url, parameters),
-      getRequestInit(requestInit),
-    );
+    const fullUrl = getFullUrl(url, parameters);
+    console.log(`Requesting ${requestInit.method ?? "GET"} "${fullUrl}"`);
+    return await fetch(fullUrl, getRequestInit(requestInit));
   };
 
   requestFn.getUrl = getFullUrl;

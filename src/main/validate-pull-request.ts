@@ -38,7 +38,7 @@ export const validatePullRequest = async (
     id: projectKey,
     pullRequest: String(pullRequest),
   });
-  const sonarLink = link("SonarCloud", sonarUrl);
+  const sonarLink = link("See analysis details on SonarCloud", sonarUrl);
 
   comment.push(section(commentHeader, sonarLink, commentBodyComponents));
 
