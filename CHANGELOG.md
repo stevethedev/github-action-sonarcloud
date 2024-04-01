@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.3.4
+
+### Patch Changes
+
+- d58baae: Fix a bug where every issue was being reported in validation logic
+
 ## 0.3.3
 
 ### Patch Changes
