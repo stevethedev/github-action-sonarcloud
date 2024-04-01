@@ -37,6 +37,7 @@ export interface Params {
   onComponentOnly?: boolean;
   organization?: string;
   owaspTop10?: OwaspTopTen[];
+  projects?: string[];
   p?: number;
   ps?: number;
   pullRequest?: string;
@@ -57,13 +58,19 @@ export const toQueryParams = (
 
   const entries = Object.entries(params) as [keyof Params, unknown][];
 
+  const parseCreatedInLast = (
+    value: Record<string | number | symbol, unknown>,
+  ): string => {
+    const y = isNumber(value.y) ? `${value.y}y` : "";
+    const m = isNumber(value.m) ? `${value.m}m` : "";
+    const w = isNumber(value.w) ? `${value.w}w` : "";
+    const d = isNumber(value.d) ? `${value.d}d` : "";
+    return `${y}${m}${w}${d}`;
+  };
+
   return entries.reduce((acc, [key, value]) => {
     if (key === "createdInLast" && isObject(value)) {
-      const y = isNumber(value.y) ? `${value.y}y` : "";
-      const m = isNumber(value.m) ? `${value.m}m` : "";
-      const w = isNumber(value.w) ? `${value.w}w` : "";
-      const d = isNumber(value.d) ? `${value.d}d` : "";
-      acc[key] = `${y}${m}${w}${d}`;
+      acc[key] = parseCreatedInLast(value);
       return acc;
     }
 
