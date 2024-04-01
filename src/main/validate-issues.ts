@@ -2,7 +2,7 @@ import getProjectIssues from "@/sonarcloud-api/issues/search";
 import type { RequestFn } from "@/request/factory";
 import type { Comment } from "@/comment";
 import { header } from "@/comment/header";
-import { inline, section } from "@/comment/section";
+import { section } from "@/comment/section";
 import { unorderedList } from "@/comment/list";
 import { link } from "@/comment/link";
 import { isString } from "@/types/string";
@@ -13,10 +13,6 @@ export interface Options {
   projectKey: string;
   pullRequest: number;
 }
-
-const getIssueType = (issue: Issue): string => {
-  return isString(issue.type) ? issue.type : "Unknown";
-};
 
 const getIssueSeverity = (issue: Issue): string => {
   switch (issue.severity?.toLowerCase()) {
@@ -75,17 +71,11 @@ export const validateIssues = async (
 
   const issueToString = (issue: Issue): string => {
     const severity = getIssueSeverity(issue);
-    const type = getIssueType(issue);
     const effort = getIssueEffort(issue);
     const message = getIssueMessage(issue);
     const url = getIssueUrl(issue);
     return unorderedList(
-      inline(
-        `${severity} (${type} - ${effort}): ${message}`,
-        "(",
-        link("link", url),
-        ")",
-      ),
+      `${severity} (${effort}): ${message} (${link("link", url)})`,
     );
   };
 

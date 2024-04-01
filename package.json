@@ -1,6 +1,6 @@
 {
   "name": "github-action-sonarcloud",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "This action integrates SonarCloud feedback into a GitHub Repository.",
   "scripts": {
     "build": "node ./bin/build.mjs",

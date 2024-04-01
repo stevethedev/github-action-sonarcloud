@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.3.6
+
+### Patch Changes
+
+- Fix weird comment phrasing and spacing
+
 ## 0.3.5
 
 ### Patch Changes
