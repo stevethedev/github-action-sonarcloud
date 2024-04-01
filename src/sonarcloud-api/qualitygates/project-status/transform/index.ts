@@ -48,14 +48,26 @@ const isPercentValue = (condition: Condition): boolean =>
 const parseDescription = (condition: Condition): string => {
   const title = parseTitle(condition.metricKey);
   if (isGradedValue(condition)) {
-    return inline(gradeIcon(parseGradedValue(condition.actualValue)), title);
+    return inline(
+      gradeIcon(parseGradedValue(condition.actualValue)),
+      title,
+      " (Requires ",
+      parseGradedValue(condition.errorThreshold),
+      ")",
+    );
   }
 
   if (isPercentValue(condition)) {
-    return inline(title, `${Math.floor(Number(condition.actualValue))}%`);
+    return inline(
+      title,
+      `${Math.floor(Number(condition.actualValue))}% (Requires ${Math.floor(Number(condition.errorThreshold))}%)`,
+    );
   }
 
-  return inline(title, `(${condition.actualValue})`);
+  return inline(
+    title,
+    `(${condition.actualValue}; requires ${condition.errorThreshold})`,
+  );
 };
 
 export const transform = (data: unknown): Result => {
