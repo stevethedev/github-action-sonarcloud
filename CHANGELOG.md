@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.3.5
+
+### Patch Changes
+
+- 3714e3a: Add icons to issue types
+
 ## 0.3.4
 
 ### Patch Changes
