@@ -1,5 +1,15 @@
 # github-action-sonarcloud
 
+## 0.3.0
+
+### Minor Changes
+
+- a9f071c: Add comments about issues discovered in a pull-request
+
+### Patch Changes
+
+- f49e229: Prevent non-PR checks from failing
+
 ## 0.2.13
 
 ### Patch Changes
