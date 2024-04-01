@@ -23,6 +23,10 @@ export const main = async (
   { fetch, comment, pullRequest }: MainContext,
   { sonarToken, sonarUrl, projectKey }: MainOptions,
 ): Promise<boolean> => {
+  if (!isNumber(pullRequest)) {
+    return true;
+  }
+
   const sonarRequest = requestFactory({
     baseUrl: sonarUrl,
     token: sonarToken,
@@ -37,19 +41,15 @@ export const main = async (
     return false;
   }
 
-  const isPullRequestValid = isNumber(pullRequest)
-    ? await validatePullRequest(sonarRequest, comment, {
-        projectKey,
-        pullRequest,
-      })
-    : true;
+  const isPullRequestValid = await validatePullRequest(sonarRequest, comment, {
+    projectKey,
+    pullRequest,
+  });
 
-  const isIssuesValid = isNumber(pullRequest)
-    ? await validateIssues(sonarRequest, comment, {
-        projectKey,
-        pullRequest,
-      })
-    : true;
+  const isIssuesValid = await validateIssues(sonarRequest, comment, {
+    projectKey,
+    pullRequest,
+  });
 
   await comment.post();
 
