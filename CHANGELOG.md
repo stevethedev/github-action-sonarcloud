@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.3.1
+
+### Patch Changes
+
+- Fixed a bug in the issue-parsing behavior
+
 ## 0.3.0
 
 ### Minor Changes

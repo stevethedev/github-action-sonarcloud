@@ -7,15 +7,6 @@ export interface Paging {
   total: number;
 }
 
-export const isPaging = (value: unknown): value is Paging => {
-  return (
-    isObject(value) &&
-    isNumber(value.pageIndex) &&
-    isNumber(value.pageSize) &&
-    isNumber(value.total)
-  );
-};
-
 export const parsePaging = (value: unknown): Paging => {
   if (!isObject(value)) {
     throw new Error(`Expected object, got ${typeof value}`);

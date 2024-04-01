@@ -1,9 +1,10 @@
 import { isObject } from "@/types/object";
 import { isString } from "@/types/string";
+import { isDefined } from "@/types/defined";
 
 export interface Impact {
-  softwareQuality: string;
-  severity: string;
+  softwareQuality?: string;
+  severity?: string;
 }
 
 export const parseImpact = (value: unknown): Impact => {
@@ -11,11 +12,11 @@ export const parseImpact = (value: unknown): Impact => {
     throw new Error(`Expected object, got ${typeof value}`);
   }
 
-  if (!isString(value.softwareQuality)) {
+  if (isDefined(value.softwareQuality) && !isString(value.softwareQuality)) {
     throw new Error(`Expected softwareQuality, got ${value.softwareQuality}`);
   }
 
-  if (!isString(value.severity)) {
+  if (isDefined(value.severity) && !isString(value.severity)) {
     throw new Error(`Expected severity, got ${value.severity}`);
   }
 

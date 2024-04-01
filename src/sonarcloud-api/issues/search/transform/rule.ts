@@ -1,24 +1,14 @@
 import { isObject } from "@/types/object";
 import { isString } from "@/types/string";
+import { isDefined } from "@/types/defined";
 
 export interface Rule {
   key: string;
-  name: string;
-  status: string;
-  lang: string;
-  langName: string;
+  name?: string;
+  status?: string;
+  lang?: string;
+  langName?: string;
 }
-
-export const isRule = (value: unknown): value is Rule => {
-  return (
-    isObject(value) &&
-    isString(value.key) &&
-    isString(value.name) &&
-    isString(value.status) &&
-    isString(value.lang) &&
-    isString(value.langName)
-  );
-};
 
 export const parseRule = (value: unknown): Rule => {
   if (!isObject(value)) {
@@ -29,19 +19,19 @@ export const parseRule = (value: unknown): Rule => {
     throw new Error(`Expected key, got ${value.key}`);
   }
 
-  if (!isString(value.name)) {
+  if (isDefined(value.name) && !isString(value.name)) {
     throw new Error(`Expected name, got ${value.name}`);
   }
 
-  if (!isString(value.status)) {
+  if (isDefined(value.status) && !isString(value.status)) {
     throw new Error(`Expected status, got ${value.status}`);
   }
 
-  if (!isString(value.lang)) {
+  if (isDefined(value.lang) && !isString(value.lang)) {
     throw new Error(`Expected lang, got ${value.lang}`);
   }
 
-  if (!isString(value.langName)) {
+  if (isDefined(value.langName) && !isString(value.langName)) {
     throw new Error(`Expected langName, got ${value.langName}`);
   }
 
