@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.3.2
+
+### Patch Changes
+
+- Mark most issue-values as optional
+
 ## 0.3.1
 
 ### Patch Changes
