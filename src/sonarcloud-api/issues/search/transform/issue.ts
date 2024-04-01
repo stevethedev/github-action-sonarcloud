@@ -190,10 +190,12 @@ export const parseIssue = (value: unknown): Issue => {
     tags: value.tags,
     type: value.type,
     comments: (value.comments ?? []).map(parseComment),
-    attr: parseAttr(value.attr),
+    attr: isDefined(value.attr) ? parseAttr(value.attr) : undefined,
     transitions: value.transitions,
     actions: value.actions,
-    textRange: parseTextRange(value.textRange),
+    textRange: isDefined(value.textRange)
+      ? parseTextRange(value.textRange)
+      : undefined,
     flows: (value.flows ?? []).map(parseFlow),
     ruleDescriptionContextKey: value.ruleDescriptionContextKey,
     cleanCodeAttributeCategory: value.cleanCodeAttributeCategory,
