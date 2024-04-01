@@ -4,6 +4,7 @@ import { requestFactory } from "@/request";
 import { isNumber } from "@/types/number";
 import { validateCredentials } from "./validate-credentials";
 import type { Comment } from "@/comment";
+import { validateIssues } from "@/main/validate-issues";
 
 export interface MainOptions {
   commentId?: number;
@@ -43,7 +44,14 @@ export const main = async (
       })
     : true;
 
+  const isIssuesValid = isNumber(pullRequest)
+    ? await validateIssues(sonarRequest, comment, {
+        projectKey,
+        pullRequest,
+      })
+    : true;
+
   await comment.post();
 
-  return isPullRequestValid;
+  return isPullRequestValid && isIssuesValid;
 };

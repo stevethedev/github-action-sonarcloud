@@ -1,3 +1,5 @@
+import { isDefined } from "@/types/defined";
+
 export interface RequestFn {
   (url: string, options: RequestOptions): Promise<Response>;
 
@@ -5,7 +7,7 @@ export interface RequestFn {
 }
 
 interface RequestOptions extends RequestInit {
-  parameters?: Record<string, string>;
+  parameters?: Partial<Record<string, string>>;
 }
 
 export interface Options {
@@ -34,11 +36,13 @@ export const factory = ({
 
   const getFullUrl = (
     url: URL | string,
-    parameters: Record<string, string>,
+    parameters: Partial<Record<string, string>>,
   ): string => {
     const fullUrl = new URL(url, baseUrl);
     Object.entries(parameters).forEach(([key, value]) => {
-      fullUrl.searchParams.append(key, value);
+      if (isDefined(value)) {
+        fullUrl.searchParams.append(key, value);
+      }
     });
     return fullUrl.toString();
   };
