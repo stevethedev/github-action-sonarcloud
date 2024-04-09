@@ -5,6 +5,7 @@ import { isNumber } from "@/types/number";
 import { validateCredentials } from "./validate-credentials";
 import type { Comment } from "@/comment";
 import { validateIssues } from "@/main/validate-issues";
+import { validateTaskComplete } from "@/main/validate-task-complete";
 
 export interface MainOptions {
   commentId?: number;
@@ -40,6 +41,11 @@ export const main = async (
     await comment.post();
     return false;
   }
+
+  await validateTaskComplete(sonarRequest, comment, {
+    projectKey,
+    pullRequest,
+  });
 
   const isPullRequestValid = await validatePullRequest(sonarRequest, comment, {
     projectKey,
