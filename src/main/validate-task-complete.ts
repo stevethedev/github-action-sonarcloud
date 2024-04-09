@@ -36,5 +36,7 @@ export const validateTaskComplete = async (
     if (allTasksComplete) {
       return true;
     }
+
+    await new Promise((resolve) => setTimeout(resolve, 5000));
   }
 };
