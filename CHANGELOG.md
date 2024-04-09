@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.3.7
+
+### Patch Changes
+
+- 20eb365: Wait for analysis to finish before decorating the PR
+
 ## 0.3.6
 
 ### Patch Changes
