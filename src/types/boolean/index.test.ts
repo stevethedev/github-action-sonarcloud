@@ -1,4 +1,4 @@
-import { isBoolean } from "./boolean";
+import { isBoolean, assertIsBoolean } from ".";
 
 describe("isBoolean", () => {
   it("should return true for a boolean", () => {
@@ -39,5 +39,26 @@ describe("isBoolean", () => {
   it("should return false for undefined", () => {
     const value = undefined;
     expect(isBoolean(value)).toBe(false);
+  });
+});
+
+describe("assertIsBoolean", () => {
+  it("should not throw if the value is a boolean", () => {
+    const value = true;
+    expect(() => assertIsBoolean(value)).not.toThrow();
+  });
+
+  it("should throw if the value is not a boolean", () => {
+    const value = "string";
+    expect(() => assertIsBoolean(value)).toThrow(
+      "Expected boolean, got string",
+    );
+  });
+
+  it("throws the overridden error message", () => {
+    const value = "string";
+    expect(() => assertIsBoolean(value, "Custom message")).toThrow(
+      "Custom message",
+    );
   });
 });

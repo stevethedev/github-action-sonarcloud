@@ -1,4 +1,4 @@
-import { hasProperty, isObject } from "./object";
+import { assertIsObject, isObject } from "@/types/object/is-object";
 
 describe("isObject", () => {
   it("should return true for an object", () => {
@@ -42,10 +42,21 @@ describe("isObject", () => {
   });
 });
 
-describe("hasProperty", () => {
-  it("should return true for an object with the property", () => {
-    const obj = { key: "value" };
-    const prop = "key";
-    expect(hasProperty(obj, prop)).toBe(true);
+describe("assertIsObject", () => {
+  it("should not throw if the value is an object", () => {
+    const value = {};
+    expect(() => assertIsObject(value)).not.toThrow();
+  });
+
+  it("should throw if the value is not an object", () => {
+    const value = "string";
+    expect(() => assertIsObject(value)).toThrow("Expected object, got string");
+  });
+
+  it("throws the overridden error message", () => {
+    const value = "string";
+    expect(() => assertIsObject(value, "Custom message")).toThrow(
+      "Custom message",
+    );
   });
 });

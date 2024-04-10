@@ -1,4 +1,4 @@
-import { isNumber } from "./number";
+import { isNumber } from "@/types/number/index";
 
 describe("isNumber", () => {
   it("should return true for number", () => {
