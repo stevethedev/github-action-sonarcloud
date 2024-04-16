@@ -1,4 +1,3 @@
-import { getInput } from "@actions/core";
+import { getArg } from "@/args/base";
 
-export const getSonarUrl = (): string =>
-  getInput("sonarUrl", { required: false }) ?? "https://sonarcloud.io";
+export const getSonarUrl = getArg("sonarUrl", "https://sonarcloud.io");

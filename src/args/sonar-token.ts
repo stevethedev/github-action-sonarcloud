@@ -1,4 +1,3 @@
-import { getInput } from "@actions/core";
+import { getArg } from "@/args/base";
 
-export const getSonarToken = (): string =>
-  getInput("sonarToken", { required: true });
+export const getSonarToken = getArg("sonarToken");
