@@ -1,5 +1,5 @@
+import { getArg } from "@/args/base";
 import { getSonarProjectFile } from "@/args/sonar-project-file";
-import { getInput } from "@actions/core";
 import { readFileSync } from "fs";
 
 export const readProjectKey = (): string => {
@@ -16,10 +16,4 @@ export const readProjectKey = (): string => {
   return projectKey.split("=")[1].trim();
 };
 
-export const getSonarProjectKey = (): string => {
-  const userDefinedValue = getInput("sonarProjectKey", { required: false });
-  if (userDefinedValue) {
-    return userDefinedValue;
-  }
-  return readProjectKey();
-};
+export const getSonarProjectKey = getArg("sonarProjectKey", readProjectKey());

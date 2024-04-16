@@ -1,4 +1,3 @@
-import { getInput } from "@actions/core";
+import { getArg } from "@/args/base";
 
-export const getSonarProjectFile = (): string =>
-  getInput("sonarProjectFile", { required: true });
+export const getSonarProjectFile = getArg("sonarProjectFile");

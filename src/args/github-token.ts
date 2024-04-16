@@ -1,4 +1,3 @@
-import { getInput } from "@actions/core";
+import { getArg } from "@/args/base";
 
-export const getGitHubToken = (): string =>
-  getInput("githubToken", { required: true });
+export const getGitHubToken = getArg("githubToken");
