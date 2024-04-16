@@ -1,41 +1,39 @@
-import { isString } from "@/types/string";
-import { isObject } from "@/types/object";
-import type { Task } from ".";
-import { isTask, parseTask } from ".";
+import assertType from "@std-types/assert-type";
+import { type Shape, getIsShapedLike } from "@std-types/is-shaped-like";
+import isString from "@std-types/is-string";
+import { type RawTask, type Task, rawTaskShape, taskShape, parseTask } from ".";
+
+export interface RawBranchTask extends RawTask {
+  branch: string;
+  branchType: string;
+}
 
 export interface BranchTask extends Task {
   branch: string;
   branchType: string;
 }
 
-export const isBranchTask = (data: unknown): data is BranchTask => {
-  return (
-    isTask(data) &&
-    isObject(data) &&
-    isString(data.branch) &&
-    isString(data.branchType)
-  );
+const rawBranchTaskShape: Shape<RawBranchTask> = {
+  ...rawTaskShape,
+  branch: isString,
+  branchType: isString,
 };
 
+const branchTaskShape: Shape<BranchTask> = {
+  ...rawBranchTaskShape,
+  ...taskShape,
+};
+
+export const isRawBranchTask =
+  getIsShapedLike<RawBranchTask>(rawBranchTaskShape);
+export const isBranchTask = getIsShapedLike<BranchTask>(branchTaskShape);
+
 export const parseBranchTask = (data: unknown): BranchTask => {
-  const task = parseTask(data);
-
-  if (!isObject(data)) {
-    throw new Error("Invalid data: data is not an object");
-  }
-
-  const { branch, branchType } = data;
-  if (!isString(branch)) {
-    throw new Error("Invalid data: data.branch is not a string");
-  }
-
-  if (!isString(branchType)) {
-    throw new Error("Invalid data: data.branchType is not a string");
-  }
+  assertType(data, isRawBranchTask);
 
   return {
-    ...task,
-    branch,
-    branchType,
+    ...parseTask(data),
+    branch: data.branch,
+    branchType: data.branchType,
   };
 };

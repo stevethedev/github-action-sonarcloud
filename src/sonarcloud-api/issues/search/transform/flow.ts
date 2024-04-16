@@ -1,21 +1,32 @@
-import type { Location } from "./location";
-import { parseLocation } from "./location";
-import { isObject } from "@/types/object";
-import { isArray } from "@/types/array";
-import { isDefined } from "@/types/defined";
+import assertType from "@std-types/assert-type";
+import { getIsShapedLike } from "@std-types/is-shaped-like";
+import {
+  isRawLocation,
+  isLocation,
+  type Location,
+  type RawLocation,
+  parseLocation,
+} from "./location";
+import { getIsArray } from "@std-types/is-array";
 
-export interface Flow {
+export interface RawFlow {
+  locations: RawLocation[];
+}
+
+export interface Flow extends Omit<RawFlow, "locations"> {
   locations: Location[];
 }
 
-export const parseFlow = (value: unknown): Flow => {
-  if (!isObject(value)) {
-    throw new Error(`Expected object, got ${typeof value}`);
-  }
+export const isRawFlow = getIsShapedLike<RawFlow>({
+  locations: getIsArray(isRawLocation),
+});
 
-  if (isDefined(value.locations) && !isArray(value.locations)) {
-    throw new Error(`Expected locations, got ${value.locations}`);
-  }
+export const isFlow = getIsShapedLike<Flow>({
+  locations: getIsArray(isLocation),
+});
+
+export const parseFlow = (value: unknown): Flow => {
+  assertType(value, isRawFlow);
 
   return {
     locations: (value.locations ?? []).map(parseLocation),

@@ -1,11 +1,12 @@
-import { assertFactory } from "@/types/assert";
-import { isNumber } from "@/types/number";
+import { getAssertType } from "@std-types/assert-type";
+import isNumber from "@std-types/is-number";
+import isInstanceOf from "@std-types/is-instance-of";
 
 export const isDate = (value: unknown): value is Date => {
-  return value instanceof Date && isNumber(value.getTime());
+  return isInstanceOf(value, Date) && isNumber(value.getTime());
 };
 
-export const assertIsDate = assertFactory(
+export const assertIsDate = getAssertType(
   isDate,
   (value) => `Expected Date, got ${typeof value}`,
 );

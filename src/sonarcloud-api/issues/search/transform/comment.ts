@@ -1,56 +1,43 @@
-import { isBoolean } from "@/types/boolean";
 import { isDate } from "@/types/date";
-import { isObject } from "@/types/object";
-import { isString } from "@/types/string";
+import isBoolean from "@std-types/is-boolean";
+import { type Shape, getIsShapedLike } from "@std-types/is-shaped-like";
+import isString from "@std-types/is-string";
+import assertType from "@std-types/assert-type";
 
-export interface Comment {
+export interface RawComment {
   key: string;
   login: string;
   htmlText: string;
   markdown: string;
   updatable: boolean;
+  createdAt: string;
+}
+
+const rawCommentShape: Shape<RawComment> = {
+  key: isString,
+  login: isString,
+  htmlText: isString,
+  markdown: isString,
+  updatable: isBoolean,
+  createdAt: isString,
+};
+
+export const isRawComment = getIsShapedLike<RawComment>(rawCommentShape);
+
+export interface Comment extends Omit<RawComment, "createdAt"> {
   createdAt: Date;
 }
 
+export const isComment = getIsShapedLike<Comment>({
+  ...rawCommentShape,
+  createdAt: isDate,
+});
+
 export const parseComment = (value: unknown): Comment => {
-  if (!isObject(value)) {
-    throw new Error(`Expected object, got ${typeof value}`);
-  }
-
-  if (!isString(value.key)) {
-    throw new Error(`Expected key, got ${value.key}`);
-  }
-
-  if (!isString(value.login)) {
-    throw new Error(`Expected login, got ${value.login}`);
-  }
-
-  if (!isString(value.htmlText)) {
-    throw new Error(`Expected htmlText, got ${value.htmlText}`);
-  }
-
-  if (!isString(value.markdown)) {
-    throw new Error(`Expected markdown, got ${value.markdown}`);
-  }
-
-  if (!isBoolean(value.updatable)) {
-    throw new Error(`Expected updatable, got ${value.updatable}`);
-  }
-
-  if (!isString(value.createdAt)) {
-    throw new Error(`Expected createdAt, got ${value.createdAt}`);
-  }
-  const createdAt = new Date(value.createdAt);
-  if (!isDate(createdAt)) {
-    throw new Error(`Expected createdAt, got ${value.createdAt}`);
-  }
+  assertType(value, isRawComment);
 
   return {
-    key: value.key,
-    login: value.login,
-    htmlText: value.htmlText,
-    markdown: value.markdown,
-    updatable: value.updatable,
-    createdAt,
+    ...value,
+    createdAt: new Date(value.createdAt),
   };
 };

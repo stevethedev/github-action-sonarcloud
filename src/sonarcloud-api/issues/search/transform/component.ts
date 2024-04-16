@@ -1,9 +1,11 @@
-import { isBoolean } from "@/types/boolean";
-import { isDefined } from "@/types/defined";
-import { isObject } from "@/types/object";
-import { isString } from "@/types/string";
+import assertType from "@std-types/assert-type";
+import isBoolean from "@std-types/is-boolean";
+import { getIsOneOf } from "@std-types/is-one-of";
+import { getIsShapedLike } from "@std-types/is-shaped-like";
+import isString from "@std-types/is-string";
+import isUndefined from "@std-types/is-undefined";
 
-export interface Component {
+export interface RawComponent {
   key: string;
   enabled?: boolean;
   qualifier?: string;
@@ -12,41 +14,20 @@ export interface Component {
   path?: string;
 }
 
+export const isRawComponent = getIsShapedLike<RawComponent>({
+  key: isString,
+  enabled: getIsOneOf(isBoolean, isUndefined),
+  qualifier: getIsOneOf(isString, isUndefined),
+  name: getIsOneOf(isString, isUndefined),
+  longName: getIsOneOf(isString, isUndefined),
+  path: getIsOneOf(isString, isUndefined),
+});
+
+export interface Component extends RawComponent {}
+
+export const isComponent = isRawComponent;
+
 export const parseComponent = (value: unknown): Component => {
-  if (!isObject(value)) {
-    throw new Error(`Expected object, got ${typeof value}`);
-  }
-
-  if (!isString(value.key)) {
-    throw new Error(`Expected key, got ${value.key}`);
-  }
-
-  if (isDefined(value.enabled) && !isBoolean(value.enabled)) {
-    throw new Error(`Expected enabled, got ${value.enabled}`);
-  }
-
-  if (isDefined(value.qualifier) && !isString(value.qualifier)) {
-    throw new Error(`Expected qualifier, got ${value.qualifier}`);
-  }
-
-  if (isDefined(value.name) && !isString(value.name)) {
-    throw new Error(`Expected name, got ${value.name}`);
-  }
-
-  if (isDefined(value.longName) && !isString(value.longName)) {
-    throw new Error(`Expected longName, got ${value.longName}`);
-  }
-
-  if (isDefined(value.path) && !isString(value.path)) {
-    throw new Error(`Expected path, got ${value.path}`);
-  }
-
-  return {
-    key: value.key,
-    enabled: value.enabled,
-    qualifier: value.qualifier,
-    name: value.name,
-    longName: value.longName,
-    path: value.path,
-  };
+  assertType(value, isRawComponent);
+  return value;
 };

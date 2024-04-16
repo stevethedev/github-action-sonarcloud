@@ -1,28 +1,22 @@
-import { isObject } from "@/types/object";
-import { isString } from "@/types/string";
-import { isDefined } from "@/types/defined";
+import isUndefined from "@std-types/is-undefined";
+import { getIsOneOf } from "@std-types/is-one-of";
+import { getIsShapedLike } from "@std-types/is-shaped-like";
+import isString from "@std-types/is-string";
+import assertType from "@std-types/assert-type";
 
-export interface Attr {
+export interface RawAttr {
   "jira-issue-key"?: string;
 }
 
+export interface Attr extends RawAttr {}
+
+export const isRawAttr = getIsShapedLike<RawAttr>({
+  "jira-issue-key": getIsOneOf(isString, isUndefined),
+});
+
+export const isAttr = isRawAttr;
+
 export const parseAttr = (value: unknown): Attr => {
-  if (!isObject(value)) {
-    throw new Error(`Expected object, got ${typeof value}`);
-  }
-
-  if (
-    isDefined(value["jira-issue-key"]) &&
-    !isString(value["jira-issue-key"])
-  ) {
-    throw new Error(`Expected jira-issue-key, got ${value["jira-issue-key"]}`);
-  }
-
-  if (!isDefined(value["jira-issue-key"])) {
-    return {};
-  }
-
-  return {
-    "jira-issue-key": value["jira-issue-key"],
-  };
+  assertType(value, isRawAttr);
+  return value;
 };

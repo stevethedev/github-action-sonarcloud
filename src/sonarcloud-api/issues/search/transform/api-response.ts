@@ -1,16 +1,37 @@
-import { isArray } from "@/types/array";
-import { isObject } from "@/types/object";
-import type { Component } from "./component";
-import { parseComponent } from "./component";
-import type { Issue } from "./issue";
-import { parseIssue } from "./issue";
-import type { Paging } from "./paging";
-import { parsePaging } from "./paging";
-import type { Rule } from "./rule";
-import { parseRule } from "./rule";
-import type { User } from "./user";
-import { parseUser } from "./user";
-import { isDefined } from "@/types/defined";
+import assertType from "@std-types/assert-type";
+import { getIsArray } from "@std-types/is-array";
+import { getIsShapedLike } from "@std-types/is-shaped-like";
+import {
+  type Component,
+  type RawComponent,
+  isRawComponent,
+  parseComponent,
+} from "./component";
+import { type Issue, type RawIssue, isRawIssue, parseIssue } from "./issue";
+import {
+  type Paging,
+  type RawPaging,
+  isRawPaging,
+  parsePaging,
+} from "./paging";
+import { type RawRule, type Rule, isRawRule, parseRule } from "./rule";
+import { type RawUser, type User, isRawUser, parseUser } from "./user";
+
+interface RawApiResponse {
+  paging: RawPaging;
+  issues: RawIssue[];
+  components: RawComponent[];
+  rules: RawRule[];
+  users: RawUser[];
+}
+
+const isRawApiResponse = getIsShapedLike<RawApiResponse>({
+  paging: isRawPaging,
+  issues: getIsArray(isRawIssue),
+  components: getIsArray(isRawComponent),
+  rules: getIsArray(isRawRule),
+  users: getIsArray(isRawUser),
+});
 
 export interface ApiResponse {
   paging: Paging;
@@ -21,25 +42,7 @@ export interface ApiResponse {
 }
 
 export const parseApiResponse = (value: unknown): ApiResponse => {
-  if (!isObject(value)) {
-    throw new Error(`Expected object, got ${typeof value}`);
-  }
-
-  if (isDefined(value.issues) && !isArray(value.issues)) {
-    throw new Error(`Expected issues, got ${value.issues}`);
-  }
-
-  if (isDefined(value.components) && !isArray(value.components)) {
-    throw new Error(`Expected components, got ${value.components}`);
-  }
-
-  if (isDefined(value.rules) && !isArray(value.rules)) {
-    throw new Error(`Expected rules, got ${value.rules}`);
-  }
-
-  if (isDefined(value.users) && !isArray(value.users)) {
-    throw new Error(`Expected users, got ${value.users}`);
-  }
+  assertType(value, isRawApiResponse);
 
   return {
     paging: parsePaging(value.paging),

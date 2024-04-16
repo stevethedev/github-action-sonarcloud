@@ -1,5 +1,5 @@
-import { isNumber } from "@/types/number";
-import type { context, getOctokit } from "@actions/github";
+import isNumber from "@std-types/is-number";
+import { type context, type getOctokit } from "@actions/github";
 
 export interface Options {
   octokit: ReturnType<typeof getOctokit>;

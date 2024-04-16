@@ -1,43 +1,44 @@
-import { isBoolean } from "@/types/boolean";
-import { isObject } from "@/types/object";
-import { isString } from "@/types/string";
-import type { Condition } from "./condition";
-import { parseCondition } from "./condition";
+import assertType from "@std-types/assert-type";
+import isArray, { getIsArray } from "@std-types/is-array";
+import isBoolean from "@std-types/is-boolean";
+import { getIsShapedLike, type Shape } from "@std-types/is-shaped-like";
+import isString from "@std-types/is-string";
+import {
+  type Condition,
+  isRawCondition,
+  parseCondition,
+  type RawCondition,
+} from "./condition";
 
-export interface ProjectStatus {
+export interface RawProjectStatus {
   status: string;
-  conditions: Condition[];
+  conditions: RawCondition[];
   periods: unknown[];
   ignoredConditions: boolean;
 }
 
+export interface ProjectStatus extends RawProjectStatus {
+  conditions: Condition[];
+}
+
+const rawProjectStatusShape: Shape<RawProjectStatus> = {
+  status: isString,
+  conditions: getIsArray(isRawCondition),
+  periods: isArray,
+  ignoredConditions: isBoolean,
+};
+
+export const isRawProjectStatus = getIsShapedLike<RawProjectStatus>(
+  rawProjectStatusShape,
+);
+export const isProjectStatus = getIsShapedLike<ProjectStatus>(
+  rawProjectStatusShape,
+);
+
 export const parseProjectStatus = (data: unknown): ProjectStatus => {
-  if (!isObject(data)) {
-    throw new Error("Invalid data: data is not an object");
-  }
-
-  const { status, conditions, periods, ignoredConditions } = data;
-
-  if (!isString(status)) {
-    throw new Error("Invalid data: data.status is not a string");
-  }
-
-  if (!Array.isArray(conditions)) {
-    throw new Error("Invalid data: data.conditions is not an array");
-  }
-
-  if (!Array.isArray(periods)) {
-    throw new Error("Invalid data: data.periods is not an array");
-  }
-
-  if (!isBoolean(ignoredConditions)) {
-    throw new Error("Invalid data: data.ignoredConditions is not a boolean");
-  }
-
+  assertType(data, isRawProjectStatus);
   return {
-    status,
-    conditions: conditions.map(parseCondition),
-    periods,
-    ignoredConditions,
+    ...data,
+    conditions: data.conditions.map(parseCondition),
   };
 };

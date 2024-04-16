@@ -1,8 +1,9 @@
-import { isNumber } from "@/types/number";
-import { isObject } from "@/types/object";
-import { isString } from "@/types/string";
+import assertType from "@std-types/assert-type";
+import isNumber from "@std-types/is-number";
+import { getIsShapedLike, type Shape } from "@std-types/is-shaped-like";
+import isString from "@std-types/is-string";
 
-export interface Condition {
+export interface RawCondition {
   status: string;
   metricKey: string;
   comparator: string;
@@ -10,51 +11,23 @@ export interface Condition {
   errorThreshold: string;
   actualValue: string;
 }
+export interface Condition extends RawCondition {}
+
+const rawConditionShape: Shape<RawCondition> = {
+  status: isString,
+  metricKey: isString,
+  comparator: isString,
+  periodIndex: isNumber,
+  errorThreshold: isString,
+  actualValue: isString,
+};
+
+const conditionShape: Shape<Condition> = rawConditionShape;
+
+export const isRawCondition = getIsShapedLike<RawCondition>(rawConditionShape);
+export const isCondition = getIsShapedLike<Condition>(conditionShape);
 
 export const parseCondition = (data: unknown): Condition => {
-  if (!isObject(data)) {
-    throw new Error("Invalid data: data is not an object");
-  }
-
-  const {
-    status,
-    metricKey,
-    comparator,
-    periodIndex,
-    errorThreshold,
-    actualValue,
-  } = data;
-
-  if (!isString(status)) {
-    throw new Error("Invalid data: data.status is not a string");
-  }
-
-  if (!isString(metricKey)) {
-    throw new Error("Invalid data: data.metricKey is not a string");
-  }
-
-  if (!isString(comparator)) {
-    throw new Error("Invalid data: data.comparator is not a string");
-  }
-
-  if (!isNumber(periodIndex)) {
-    throw new Error("Invalid data: data.periodIndex is not a number");
-  }
-
-  if (!isString(errorThreshold)) {
-    throw new Error("Invalid data: data.errorThreshold is not a string");
-  }
-
-  if (!isString(actualValue)) {
-    throw new Error("Invalid data: data.actualValue is not a string");
-  }
-
-  return {
-    status,
-    metricKey,
-    comparator,
-    periodIndex,
-    errorThreshold,
-    actualValue,
-  };
+  assertType(data, isRawCondition);
+  return data;
 };

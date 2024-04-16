@@ -1,15 +1,28 @@
-import type { ProjectStatus } from "@/sonarcloud-api/qualitygates/project-status/transform/project-status";
-import { parseProjectStatus } from "@/sonarcloud-api/qualitygates/project-status/transform/project-status";
-import { isObject } from "@/types/object";
+import {
+  isRawProjectStatus,
+  parseProjectStatus,
+  type ProjectStatus,
+} from "@/sonarcloud-api/qualitygates/project-status/transform/project-status";
+import assertType from "@std-types/assert-type";
+import { getIsShapedLike, type Shape } from "@std-types/is-shaped-like";
 
-export interface ApiResponse {
+export interface RawApiResponse {
   projectStatus: ProjectStatus;
 }
 
-export const parseApiResponse = (data: unknown): ApiResponse => {
-  if (!isObject(data)) {
-    throw new Error("Invalid data: data is not an object");
-  }
+export interface ApiResponse extends RawApiResponse {}
 
+const rawApiResponseShape: Shape<RawApiResponse> = {
+  projectStatus: isRawProjectStatus,
+};
+
+const apiResponseShape: Shape<ApiResponse> = rawApiResponseShape;
+
+export const isRawApiResponse =
+  getIsShapedLike<RawApiResponse>(rawApiResponseShape);
+export const isApiResponse = getIsShapedLike<ApiResponse>(apiResponseShape);
+
+export const parseApiResponse = (data: unknown): ApiResponse => {
+  assertType(data, isRawApiResponse);
   return { projectStatus: parseProjectStatus(data.projectStatus) };
 };

@@ -1,21 +1,35 @@
-import { isArray } from "@/types/array";
 import { isDate } from "@/types/date";
-import { isNumber } from "@/types/number";
-import { isObject } from "@/types/object";
-import { isString } from "@/types/string";
-import type { Attr } from "./attr";
-import { parseAttr } from "./attr";
-import type { Comment } from "./comment";
-import { parseComment } from "./comment";
-import type { Flow } from "./flow";
-import { parseFlow } from "./flow";
-import type { Impact } from "./impact";
-import { parseImpact } from "./impact";
-import type { TextRange } from "./text-range";
-import { parseTextRange } from "./text-range";
-import { isDefined } from "@/types/defined";
+import assertType from "@std-types/assert-type";
+import { getIsArray } from "@std-types/is-array";
+import isDefined from "@std-types/is-defined";
+import isNumber from "@std-types/is-number";
+import { getIsOneOf } from "@std-types/is-one-of";
+import { getIsShapedLike, type Shape } from "@std-types/is-shaped-like";
+import isString from "@std-types/is-string";
+import isUndefined from "@std-types/is-undefined";
+import { type Attr, isRawAttr, parseAttr } from "./attr";
+import {
+  type Comment,
+  isComment,
+  isRawComment,
+  parseComment,
+  type RawComment,
+} from "./comment";
+import { type Flow, isRawFlow, parseFlow, type RawFlow } from "./flow";
+import {
+  type Impact,
+  isRawImpact,
+  parseImpact,
+  type RawImpact,
+} from "./impact";
+import {
+  isRawTextRange,
+  parseTextRange,
+  type RawTextRange,
+  type TextRange,
+} from "./text-range";
 
-export interface Issue {
+export interface RawIssue {
   key: string;
   component?: string;
   project?: string;
@@ -28,178 +42,97 @@ export interface Issue {
   hash?: string;
   author?: string;
   effort?: string;
-  creationDate?: Date;
-  updateDate?: Date;
+  creationDate?: string;
+  updateDate?: string;
   tags: string[];
   type?: string;
-  comments: Comment[];
+  comments: RawComment[];
   attr?: Attr;
   transitions: string[];
   actions: string[];
-  textRange?: TextRange;
-  flows: Flow[];
+  textRange?: RawTextRange;
+  flows: RawFlow[];
   ruleDescriptionContextKey?: string;
   cleanCodeAttributeCategory?: string;
   cleanCodeAttribute?: string;
+  impacts: RawImpact[];
+}
+
+export interface Issue
+  extends Omit<
+    RawIssue,
+    | "creationDate"
+    | "updateDate"
+    | "comments"
+    | "attr"
+    | "textRange"
+    | "flows"
+    | "impacts"
+  > {
+  creationDate?: Date;
+  updateDate?: Date;
+  comments: Comment[];
+  attr?: Attr;
+  textRange?: TextRange;
+  flows: Flow[];
   impacts: Impact[];
 }
 
+const rawIssueShape: Shape<RawIssue> = {
+  key: isString,
+  component: getIsOneOf(isString, isUndefined),
+  project: getIsOneOf(isString, isUndefined),
+  rule: getIsOneOf(isString, isUndefined),
+  status: getIsOneOf(isString, isUndefined),
+  resolution: getIsOneOf(isString, isUndefined),
+  severity: getIsOneOf(isString, isUndefined),
+  message: getIsOneOf(isString, isUndefined),
+  line: getIsOneOf(isNumber, isUndefined),
+  hash: getIsOneOf(isString, isUndefined),
+  author: getIsOneOf(isString, isUndefined),
+  effort: getIsOneOf(isString, isUndefined),
+  creationDate: getIsOneOf(isString, isUndefined),
+  updateDate: getIsOneOf(isString, isUndefined),
+  tags: getIsArray(isString),
+  type: getIsOneOf(isString, isUndefined),
+  comments: getIsArray(isRawComment),
+  attr: getIsOneOf(isRawAttr, isUndefined),
+  transitions: getIsArray(isString),
+  actions: getIsArray(isString),
+  textRange: getIsOneOf(isRawTextRange, isUndefined),
+  flows: getIsArray(isRawFlow),
+  ruleDescriptionContextKey: getIsOneOf(isString, isUndefined),
+  cleanCodeAttributeCategory: getIsOneOf(isString, isUndefined),
+  cleanCodeAttribute: getIsOneOf(isString, isUndefined),
+  impacts: getIsArray(isRawImpact),
+};
+
+export const isRawIssue = getIsShapedLike<RawIssue>(rawIssueShape);
+
+export const isIssue = getIsShapedLike<Issue>({
+  ...rawIssueShape,
+  creationDate: getIsOneOf(isDate, isUndefined),
+  updateDate: getIsOneOf(isDate, isUndefined),
+  comments: getIsArray(isComment),
+});
+
 export const parseIssue = (value: unknown): Issue => {
-  if (!isObject(value)) {
-    throw new Error(`Expected object, got ${typeof value}`);
-  }
-
-  if (isDefined(value.key) && !isString(value.key)) {
-    throw new Error(`Expected key, got ${value.key}`);
-  }
-
-  if (isDefined(value.component) && !isString(value.component)) {
-    throw new Error(`Expected component, got ${value.component}`);
-  }
-
-  if (isDefined(value.project) && !isString(value.project)) {
-    throw new Error(`Expected project, got ${value.project}`);
-  }
-
-  if (isDefined(value.rule) && !isString(value.rule)) {
-    throw new Error(`Expected rule, got ${value.rule}`);
-  }
-
-  if (isDefined(value.status) && !isString(value.status)) {
-    throw new Error(`Expected status, got ${value.status}`);
-  }
-
-  if (isDefined(value.resolution) && !isString(value.resolution)) {
-    throw new Error(`Expected resolution, got ${value.resolution}`);
-  }
-
-  if (isDefined(value.severity) && !isString(value.severity)) {
-    throw new Error(`Expected severity, got ${value.severity}`);
-  }
-
-  if (isDefined(value.message) && !isString(value.message)) {
-    throw new Error(`Expected message, got ${value.message}`);
-  }
-
-  if (isDefined(value.line) && !isNumber(value.line)) {
-    throw new Error(`Expected line, got ${value.line}`);
-  }
-
-  if (isDefined(value.hash) && !isString(value.hash)) {
-    throw new Error(`Expected hash, got ${value.hash}`);
-  }
-
-  if (isDefined(value.author) && !isString(value.author)) {
-    throw new Error(`Expected author, got ${value.author}`);
-  }
-
-  if (isDefined(value.effort) && !isString(value.effort)) {
-    throw new Error(`Expected effort, got ${value.effort}`);
-  }
-
-  if (isDefined(value.creationDate) && !isString(value.creationDate)) {
-    throw new Error(`Expected creationDate, got ${value.creationDate}`);
-  }
-  const creationDate = isDefined(value.creationDate)
-    ? new Date(value.creationDate)
-    : undefined;
-  if (isDefined(creationDate) && !isDate(creationDate)) {
-    throw new Error(`Expected creationDate, got ${value.creationDate}`);
-  }
-
-  if (isDefined(value.updateDate) && !isString(value.updateDate)) {
-    throw new Error(`Expected updateDate, got ${value.updateDate}`);
-  }
-  const updateDate = isDefined(value.updateDate)
-    ? new Date(value.updateDate)
-    : undefined;
-  if (isDefined(updateDate) && !isDate(updateDate)) {
-    throw new Error(`Expected updateDate, got ${value.updateDate}`);
-  }
-
-  if (isDefined(value.tags) && !isArray(value.tags, isString)) {
-    throw new Error(`Expected tags, got ${value.tags}`);
-  }
-
-  if (isDefined(value.type) && !isString(value.type)) {
-    throw new Error(`Expected type, got ${value.type}`);
-  }
-
-  if (isDefined(value.comments) && !isArray(value.comments)) {
-    throw new Error(`Expected comments, got ${value.comments}`);
-  }
-
-  if (isDefined(value.transitions) && !isArray(value.transitions, isString)) {
-    throw new Error(`Expected transitions, got ${value.transitions}`);
-  }
-
-  if (isDefined(value.actions) && !isArray(value.actions, isString)) {
-    throw new Error(`Expected actions, got ${value.actions}`);
-  }
-
-  if (isDefined(value.flows) && !isArray(value.flows)) {
-    throw new Error(`Expected flows, got ${value.flows}`);
-  }
-
-  if (
-    isDefined(value.ruleDescriptionContextKey) &&
-    !isString(value.ruleDescriptionContextKey)
-  ) {
-    throw new Error(
-      `Expected ruleDescriptionContextKey, got ${value.ruleDescriptionContextKey}`,
-    );
-  }
-
-  if (
-    isDefined(value.cleanCodeAttributeCategory) &&
-    !isString(value.cleanCodeAttributeCategory)
-  ) {
-    throw new Error(
-      `Expected cleanCodeAttributeCategory, got ${value.cleanCodeAttributeCategory}`,
-    );
-  }
-
-  if (
-    isDefined(value.cleanCodeAttribute) &&
-    !isString(value.cleanCodeAttribute)
-  ) {
-    throw new Error(
-      `Expected cleanCodeAttribute, got ${value.cleanCodeAttribute}`,
-    );
-  }
-
-  if (isDefined(value.impacts) && !isArray(value.impacts)) {
-    throw new Error(`Expected impacts, got ${value.impacts}`);
-  }
+  assertType(value, isRawIssue);
 
   return {
-    key: value.key,
-    component: value.component,
-    project: value.project,
-    rule: value.rule,
-    status: value.status,
-    resolution: value.resolution,
-    severity: value.severity,
-    message: value.message,
-    line: value.line,
-    hash: value.hash,
-    author: value.author,
-    effort: value.effort,
-    creationDate,
-    updateDate,
-    tags: value.tags,
-    type: value.type,
-    comments: (value.comments ?? []).map(parseComment),
+    ...value,
     attr: isDefined(value.attr) ? parseAttr(value.attr) : undefined,
-    transitions: value.transitions,
-    actions: value.actions,
+    creationDate: isDefined(value.creationDate)
+      ? new Date(value.creationDate)
+      : undefined,
+    updateDate: isDefined(value.updateDate)
+      ? new Date(value.updateDate)
+      : undefined,
+    comments: value.comments.map(parseComment),
     textRange: isDefined(value.textRange)
       ? parseTextRange(value.textRange)
       : undefined,
-    flows: (value.flows ?? []).map(parseFlow),
-    ruleDescriptionContextKey: value.ruleDescriptionContextKey,
-    cleanCodeAttributeCategory: value.cleanCodeAttributeCategory,
-    cleanCodeAttribute: value.cleanCodeAttribute,
-    impacts: (value.impacts ?? []).map(parseImpact),
+    flows: value.flows.map(parseFlow),
+    impacts: value.impacts.map(parseImpact),
   };
 };

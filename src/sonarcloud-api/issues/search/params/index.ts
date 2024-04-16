@@ -1,18 +1,18 @@
-import { isBoolean } from "@/types/boolean";
-import { isNumber } from "@/types/number";
-import { isObject } from "@/types/object";
-import { isString } from "@/types/string";
-import type { AdditionalField } from "./additional-field";
-import type { CleanCodeAttributeCategory } from "./clean-code-attribute-category";
-import type { Facet } from "./facet";
-import type { ImpactSeverity } from "./impact-severity";
-import type { ImpactSoftwareQualities } from "./impact-software-qualities";
-import type { IssueStatus } from "./issue-status";
-import type { OwaspTopTen } from "./owasp-top-ten";
-import type { Resolution } from "./resolution";
-import type { SansTopTwentyFive } from "./sans-top-twenty-five";
-import type { SonarSourceSecurity } from "./sonar-source-security";
-import type { SortField } from "./sort-field";
+import isBoolean from "@std-types/is-boolean";
+import isNumber from "@std-types/is-number";
+import isObject from "@std-types/is-object";
+import isString from "@std-types/is-string";
+import { type AdditionalField } from "./additional-field";
+import { type CleanCodeAttributeCategory } from "./clean-code-attribute-category";
+import { type Facet } from "./facet";
+import { type ImpactSeverity } from "./impact-severity";
+import { type ImpactSoftwareQualities } from "./impact-software-qualities";
+import { type IssueStatus } from "./issue-status";
+import { type OwaspTopTen } from "./owasp-top-ten";
+import { type Resolution } from "./resolution";
+import { type SansTopTwentyFive } from "./sans-top-twenty-five";
+import { type SonarSourceSecurity } from "./sonar-source-security";
+import { type SortField } from "./sort-field";
 
 export interface Params {
   additionalFields?: AdditionalField[];

@@ -1,4 +1,4 @@
-import { isDefined } from "@/types/defined";
+import isDefined from "@std-types/is-defined";
 
 export interface RequestFn {
   (url: string, options: RequestOptions): Promise<Response>;

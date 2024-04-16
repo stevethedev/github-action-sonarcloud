@@ -1,28 +1,26 @@
-import { isString } from "@/types/string";
-import { isObject } from "@/types/object";
+import assertType from "@std-types/assert-type";
+import { type Shape, getIsShapedLike } from "@std-types/is-shaped-like";
+import isString from "@std-types/is-string";
 
-export interface Organization {
+export interface RawOrganization {
   key: string;
   name: string;
 }
 
+export interface Organization extends RawOrganization {}
+
+const rawOrganizationShape: Shape<RawOrganization> = {
+  key: isString,
+  name: isString,
+};
+const organizationShape: Shape<Organization> = rawOrganizationShape;
+
+export const isOrganization =
+  getIsShapedLike<Organization>(rawOrganizationShape);
+export const isRawOrganization =
+  getIsShapedLike<RawOrganization>(organizationShape);
+
 export const parseOrganization = (data: unknown): Organization => {
-  if (!isObject(data)) {
-    throw new Error("Invalid data: data is not an object");
-  }
-
-  const { key, name } = data;
-
-  if (!isString(key)) {
-    throw new Error("Invalid data: data.key is not a string");
-  }
-
-  if (!isString(name)) {
-    throw new Error("Invalid data: data.name is not a string");
-  }
-
-  return {
-    key,
-    name,
-  };
+  assertType(data, isRawOrganization);
+  return data;
 };

@@ -1,7 +1,6 @@
 import { gradeIcon } from "@/comment/grade-icon";
-import { hasProperty } from "@/types/object";
 import { parseApiResponse } from "./api-response";
-import type { Condition } from "./condition";
+import { type Condition } from "./condition";
 
 export interface Result {
   isOk: boolean;
@@ -20,19 +19,20 @@ const parseTitle = (metricKey: string): string => {
     .join(" ");
 };
 
-const gradedConditions = {
-  "1": "A",
-  "2": "B",
-  "3": "C",
-  "4": "D",
-  "5": "E",
-} as const;
+type GradedCondition = "A" | "B" | "C" | "D" | "E";
 
-const parseGradedValue = (
-  value: string,
-): (typeof gradedConditions)[keyof typeof gradedConditions] => {
-  if (hasProperty(gradedConditions, value)) {
-    return gradedConditions[value];
+const parseGradedValue = (value: string): GradedCondition => {
+  switch (value) {
+    case "1":
+      return "A";
+    case "2":
+      return "B";
+    case "3":
+      return "C";
+    case "4":
+      return "D";
+    case "5":
+      return "E";
   }
   throw new Error(`Invalid grade value: ${value}`);
 };
