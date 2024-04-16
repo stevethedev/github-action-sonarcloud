@@ -4,8 +4,7 @@ import { getSonarToken } from "@/args/sonar-token";
 import { getSonarUrl } from "@/args/sonar-url";
 import { startComment } from "@/comment";
 import { context as githubContext, getOctokit } from "@actions/github";
-import type { MainOptions, MainContext } from "./main";
-import { main } from "./main";
+import { type MainOptions, type MainContext, main } from "./main";
 
 const mainOptions: MainOptions = {
   sonarUrl: getSonarUrl(),

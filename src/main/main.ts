@@ -1,9 +1,9 @@
 import { header } from "@/comment/header";
 import { validatePullRequest } from "@/main/validate-pull-request";
 import { requestFactory } from "@/request";
-import { isNumber } from "@/types/number";
+import isNumber from "@std-types/is-number";
 import { validateCredentials } from "./validate-credentials";
-import type { Comment } from "@/comment";
+import { type Comment } from "@/comment";
 import { validateIssues } from "@/main/validate-issues";
 import { validateTaskComplete } from "@/main/validate-task-complete";
 

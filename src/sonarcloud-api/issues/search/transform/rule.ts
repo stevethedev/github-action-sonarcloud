@@ -1,8 +1,10 @@
-import { isObject } from "@/types/object";
-import { isString } from "@/types/string";
-import { isDefined } from "@/types/defined";
+import assertType from "@std-types/assert-type";
+import { getIsOneOf } from "@std-types/is-one-of";
+import { getIsShapedLike } from "@std-types/is-shaped-like";
+import isString from "@std-types/is-string";
+import isUndefined from "@std-types/is-undefined";
 
-export interface Rule {
+export interface RawRule {
   key: string;
   name?: string;
   status?: string;
@@ -10,36 +12,18 @@ export interface Rule {
   langName?: string;
 }
 
+export interface Rule extends RawRule {}
+
+export const isRawRule = getIsShapedLike<RawRule>({
+  key: isString,
+  name: getIsOneOf(isString, isUndefined),
+  status: getIsOneOf(isString, isUndefined),
+  lang: getIsOneOf(isString, isUndefined),
+  langName: getIsOneOf(isString, isUndefined),
+});
+export const isRule = isRawRule;
+
 export const parseRule = (value: unknown): Rule => {
-  if (!isObject(value)) {
-    throw new Error(`Expected object, got ${typeof value}`);
-  }
-
-  if (!isString(value.key)) {
-    throw new Error(`Expected key, got ${value.key}`);
-  }
-
-  if (isDefined(value.name) && !isString(value.name)) {
-    throw new Error(`Expected name, got ${value.name}`);
-  }
-
-  if (isDefined(value.status) && !isString(value.status)) {
-    throw new Error(`Expected status, got ${value.status}`);
-  }
-
-  if (isDefined(value.lang) && !isString(value.lang)) {
-    throw new Error(`Expected lang, got ${value.lang}`);
-  }
-
-  if (isDefined(value.langName) && !isString(value.langName)) {
-    throw new Error(`Expected langName, got ${value.langName}`);
-  }
-
-  return {
-    key: value.key,
-    name: value.name,
-    status: value.status,
-    lang: value.lang,
-    langName: value.langName,
-  };
+  assertType(value, isRawRule);
+  return value;
 };

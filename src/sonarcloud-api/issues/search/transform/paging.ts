@@ -1,32 +1,24 @@
-import { isNumber } from "@/types/number";
-import { isObject } from "@/types/object";
+import isNumber from "@std-types/is-number";
+import { getIsShapedLike } from "@std-types/is-shaped-like";
+import assertType from "@std-types/assert-type";
 
-export interface Paging {
+export interface RawPaging {
   pageIndex: number;
   pageSize: number;
   total: number;
 }
 
+export interface Paging extends RawPaging {}
+
+export const isRawPaging = getIsShapedLike<RawPaging>({
+  pageIndex: isNumber,
+  pageSize: isNumber,
+  total: isNumber,
+});
+
+export const isPaging = isRawPaging;
+
 export const parsePaging = (value: unknown): Paging => {
-  if (!isObject(value)) {
-    throw new Error(`Expected object, got ${typeof value}`);
-  }
-
-  if (!isNumber(value.pageIndex)) {
-    throw new Error(`Expected pageIndex, got ${value.pageIndex}`);
-  }
-
-  if (!isNumber(value.pageSize)) {
-    throw new Error(`Expected pageSize, got ${value.pageSize}`);
-  }
-
-  if (!isNumber(value.total)) {
-    throw new Error(`Expected total, got ${value.total}`);
-  }
-
-  return {
-    pageIndex: value.pageIndex,
-    pageSize: value.pageSize,
-    total: value.total,
-  };
+  assertType(value, isRawPaging);
+  return value;
 };

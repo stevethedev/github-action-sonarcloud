@@ -1,10 +1,10 @@
-import type { Comment } from "@/comment";
+import { type Comment } from "@/comment";
 import { header } from "@/comment/header";
 import { link } from "@/comment/link";
 import { unorderedList } from "@/comment/list";
 import { status } from "@/comment/status";
 import getProjectStatus from "@/sonarcloud-api/qualitygates/project-status";
-import type { RequestFn } from "@/request/factory";
+import { type RequestFn } from "@/request/factory";
 import { section } from "@/comment/section";
 
 export interface Options {

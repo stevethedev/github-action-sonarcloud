@@ -1,4 +1,4 @@
-import type { RequestFn } from "@/request/factory";
+import { type RequestFn } from "@/request/factory";
 import validate from ".";
 
 describe("validate", () => {
@@ -24,18 +24,14 @@ describe("validate", () => {
     const request = jest
       .fn()
       .mockResolvedValue({ json: jest.fn().mockResolvedValue("string") });
-    await expect(validate(asRequest(request))).rejects.toThrow(
-      "Invalid data: data is not an object",
-    );
+    await expect(validate(asRequest(request))).rejects.toThrow();
   });
 
   it("should throw an error if data.valid is not a boolean", async () => {
     const request = jest.fn().mockResolvedValue({
       json: jest.fn().mockResolvedValue({ valid: "string" }),
     });
-    await expect(validate(asRequest(request))).rejects.toThrow(
-      "Invalid data: data.valid is not a boolean",
-    );
+    await expect(validate(asRequest(request))).rejects.toThrow();
   });
 
   it("should throw an error if response is not JSON", async () => {

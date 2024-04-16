@@ -1,6 +1,5 @@
-import type { RequestFn } from "@/request/factory";
-import type { Result } from "./transform";
-import { transform } from "./transform";
+import { type RequestFn } from "@/request/factory";
+import { type Result, transform } from "./transform";
 
 export default async (request: RequestFn): Promise<Result> => {
   const result = await request("/api/authentication/validate", {});

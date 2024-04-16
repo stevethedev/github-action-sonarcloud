@@ -1,12 +1,12 @@
 import getProjectIssues from "@/sonarcloud-api/issues/search";
-import type { RequestFn } from "@/request/factory";
-import type { Comment } from "@/comment";
+import { type RequestFn } from "@/request/factory";
+import { type Comment } from "@/comment";
 import { header } from "@/comment/header";
 import { section } from "@/comment/section";
 import { unorderedList } from "@/comment/list";
 import { link } from "@/comment/link";
-import { isString } from "@/types/string";
-import type { Issue } from "@/sonarcloud-api/issues/search/transform/issue";
+import isString from "@std-types/is-string";
+import { type Issue } from "@/sonarcloud-api/issues/search/transform/issue";
 import { severityIcon } from "@/comment/severity-icon";
 
 export interface Options {

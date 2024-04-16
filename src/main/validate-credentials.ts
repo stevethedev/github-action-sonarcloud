@@ -1,6 +1,6 @@
-import type { Comment } from "@/comment";
+import { type Comment } from "@/comment";
 import validate from "@/sonarcloud-api/authentication/validate";
-import type { RequestFn } from "@/request/factory";
+import { type RequestFn } from "@/request/factory";
 import { status } from "@/comment/status";
 
 export const validateCredentials = async (

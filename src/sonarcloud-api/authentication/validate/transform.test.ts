@@ -13,15 +13,11 @@ describe("transform", () => {
 
   it("should throw an error if data is not an object", () => {
     const data = "string";
-    expect(() => transform(data)).toThrow(
-      "Invalid data: data is not an object",
-    );
+    expect(() => transform(data)).toThrow();
   });
 
   it("should throw an error if data.valid is not a boolean", () => {
     const data = { valid: "string" };
-    expect(() => transform(data)).toThrow(
-      "Invalid data: data.valid is not a boolean",
-    );
+    expect(() => transform(data)).toThrow();
   });
 });

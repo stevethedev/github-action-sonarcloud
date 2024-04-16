@@ -1,38 +1,26 @@
-import { isNumber } from "@/types/number";
-import { isObject } from "@/types/object";
+import assertType from "@std-types/assert-type";
+import isNumber from "@std-types/is-number";
+import { getIsShapedLike } from "@std-types/is-shaped-like";
 
-export interface TextRange {
+export interface RawTextRange {
   startLine: number;
   endLine: number;
   startOffset: number;
   endOffset: number;
 }
 
+export interface TextRange extends RawTextRange {}
+
+export const isRawTextRange = getIsShapedLike<RawTextRange>({
+  startLine: isNumber,
+  endLine: isNumber,
+  startOffset: isNumber,
+  endOffset: isNumber,
+});
+
+export const isTextRange = isRawTextRange;
+
 export const parseTextRange = (value: unknown): TextRange => {
-  if (!isObject(value)) {
-    throw new Error(`Expected object, got ${typeof value}`);
-  }
-
-  if (!isNumber(value.startLine)) {
-    throw new Error(`Expected startLine, got ${value.startLine}`);
-  }
-
-  if (!isNumber(value.endLine)) {
-    throw new Error(`Expected endLine, got ${value.endLine}`);
-  }
-
-  if (!isNumber(value.startOffset)) {
-    throw new Error(`Expected startOffset, got ${value.startOffset}`);
-  }
-
-  if (!isNumber(value.endOffset)) {
-    throw new Error(`Expected endOffset, got ${value.endOffset}`);
-  }
-
-  return {
-    startLine: value.startLine,
-    endLine: value.endLine,
-    startOffset: value.startOffset,
-    endOffset: value.endOffset,
-  };
+  assertType(value, isRawTextRange);
+  return value;
 };

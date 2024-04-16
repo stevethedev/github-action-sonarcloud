@@ -1,6 +1,6 @@
-import type { Comment } from "@/comment";
+import { type Comment } from "@/comment";
 import getCeActivity, { TaskStatus } from "@/sonarcloud-api/ce/activity";
-import type { RequestFn } from "@/request/factory";
+import { type RequestFn } from "@/request/factory";
 import { isPullRequestTask } from "@/sonarcloud-api/ce/activity/transform/task/pull-request";
 
 export interface Options {
