@@ -104,7 +104,7 @@
     "@std-types/is-boolean": "^1.0.0",
     "@std-types/is-defined": "^1.0.0",
     "@std-types/is-enum": "^0.1.0",
-    "@std-types/is-number": "^1.0.0",
+    "@std-types/is-number": "^1.2.0",
     "@std-types/is-object": "^1.0.0",
     "@std-types/is-one-of": "^1.0.0",
     "@std-types/is-shaped-like": "^2.0.0",
