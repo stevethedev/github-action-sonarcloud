@@ -20,20 +20,15 @@ describe("api-response", () => {
     });
 
     expect(result).toEqual({
-      total: 0,
-      p: 1,
-      ps: 100,
       paging: {
         pageIndex: 1,
         pageSize: 100,
         total: 0,
       },
-      effortTotal: 0,
-      debtTotal: 0,
       issues: [],
       components: [],
-      organizations: [],
-      facets: [],
+      rules: [],
+      users: [],
     });
   });
 });
