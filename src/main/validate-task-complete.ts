@@ -1,6 +1,5 @@
-import { type Comment } from "@/comment";
-import getCeActivity, { TaskStatus } from "@/sonarcloud-api/ce/activity";
 import { type RequestFn } from "@/request/factory";
+import getCeActivity, { TaskStatus } from "@/sonarcloud-api/ce/activity";
 import { isPullRequestTask } from "@/sonarcloud-api/ce/activity/transform/task/pull-request";
 
 export interface Options {
@@ -10,7 +9,6 @@ export interface Options {
 
 export const validateTaskComplete = async (
   sonarRequest: RequestFn,
-  _comment: Comment,
   { projectKey, pullRequest }: Options,
 ): Promise<boolean> => {
   for (;;) {

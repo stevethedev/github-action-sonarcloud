@@ -2,9 +2,9 @@ import { getGitHubToken } from "@/args/github-token";
 import { getSonarProjectKey } from "@/args/sonar-project-key";
 import { getSonarToken } from "@/args/sonar-token";
 import { getSonarUrl } from "@/args/sonar-url";
-import { startComment } from "@/comment";
+import { startComment } from "@/github/comment";
 import { context as githubContext, getOctokit } from "@actions/github";
-import { type MainOptions, type MainContext, main } from "./main";
+import { main, type MainContext, type MainOptions } from "./main";
 
 const mainOptions: MainOptions = {
   sonarUrl: getSonarUrl(),

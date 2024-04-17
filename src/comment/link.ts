@@ -1,1 +1,6 @@
-export const link = (text: string, url: string): string => `[${text}](${url})`;
+export interface Props {
+  text: string;
+  url: string;
+}
+
+export default ({ text, url }: Props): string => `[${text}](${url})`;
