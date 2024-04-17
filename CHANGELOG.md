@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.4.1
+
+### Patch Changes
+
+- 0d1053e: Add better error messages
+
 ## 0.4.0
 
 ### Minor Changes
