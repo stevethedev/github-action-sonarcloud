@@ -21,6 +21,10 @@ export const isRawTextRange = getIsShapedLike<RawTextRange>({
 export const isTextRange = isRawTextRange;
 
 export const parseTextRange = (value: unknown): TextRange => {
-  assertType(value, isRawTextRange);
+  assertType(
+    value,
+    isRawTextRange,
+    (x) => `Invalid text range: ${JSON.stringify(x)}`,
+  );
   return value;
 };

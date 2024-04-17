@@ -1,36 +1,38 @@
 import assertType from "@std-types/assert-type";
 import { getIsArray } from "@std-types/is-array";
+import { getIsOneOf } from "@std-types/is-one-of";
 import { getIsShapedLike } from "@std-types/is-shaped-like";
+import isUndefined from "@std-types/is-undefined";
 import {
   type Component,
-  type RawComponent,
   isRawComponent,
   parseComponent,
+  type RawComponent,
 } from "./component";
-import { type Issue, type RawIssue, isRawIssue, parseIssue } from "./issue";
+import { isRawIssue, type Issue, parseIssue, type RawIssue } from "./issue";
 import {
-  type Paging,
-  type RawPaging,
   isRawPaging,
+  type Paging,
   parsePaging,
+  type RawPaging,
 } from "./paging";
-import { type RawRule, type Rule, isRawRule, parseRule } from "./rule";
-import { type RawUser, type User, isRawUser, parseUser } from "./user";
+import { isRawRule, parseRule, type RawRule, type Rule } from "./rule";
+import { isRawUser, parseUser, type RawUser, type User } from "./user";
 
 interface RawApiResponse {
   paging: RawPaging;
-  issues: RawIssue[];
-  components: RawComponent[];
-  rules: RawRule[];
-  users: RawUser[];
+  issues?: RawIssue[];
+  components?: RawComponent[];
+  rules?: RawRule[];
+  users?: RawUser[];
 }
 
 const isRawApiResponse = getIsShapedLike<RawApiResponse>({
   paging: isRawPaging,
-  issues: getIsArray(isRawIssue),
-  components: getIsArray(isRawComponent),
-  rules: getIsArray(isRawRule),
-  users: getIsArray(isRawUser),
+  issues: getIsOneOf(isUndefined, getIsArray(isRawIssue)),
+  components: getIsOneOf(isUndefined, getIsArray(isRawComponent)),
+  rules: getIsOneOf(isUndefined, getIsArray(isRawRule)),
+  users: getIsOneOf(isUndefined, getIsArray(isRawUser)),
 });
 
 export interface ApiResponse {
@@ -42,7 +44,11 @@ export interface ApiResponse {
 }
 
 export const parseApiResponse = (value: unknown): ApiResponse => {
-  assertType(value, isRawApiResponse);
+  assertType(
+    value,
+    isRawApiResponse,
+    (x) => `Invalid API response: ${JSON.stringify(x)}`,
+  );
 
   return {
     paging: parsePaging(value.paging),

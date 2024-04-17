@@ -1,8 +1,8 @@
-import isUndefined from "@std-types/is-undefined";
+import assertType from "@std-types/assert-type";
 import { getIsOneOf } from "@std-types/is-one-of";
 import { getIsShapedLike } from "@std-types/is-shaped-like";
 import isString from "@std-types/is-string";
-import assertType from "@std-types/assert-type";
+import isUndefined from "@std-types/is-undefined";
 
 export interface RawAttr {
   "jira-issue-key"?: string;
@@ -17,6 +17,6 @@ export const isRawAttr = getIsShapedLike<RawAttr>({
 export const isAttr = isRawAttr;
 
 export const parseAttr = (value: unknown): Attr => {
-  assertType(value, isRawAttr);
+  assertType(value, isRawAttr, (x) => `Invalid attr: ${JSON.stringify(x)}`);
   return value;
 };

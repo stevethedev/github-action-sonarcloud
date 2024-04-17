@@ -28,6 +28,10 @@ export const isRawCondition = getIsShapedLike<RawCondition>(rawConditionShape);
 export const isCondition = getIsShapedLike<Condition>(conditionShape);
 
 export const parseCondition = (data: unknown): Condition => {
-  assertType(data, isRawCondition);
+  assertType(
+    data,
+    isRawCondition,
+    (x) => `Invalid condition: ${JSON.stringify(x)}`,
+  );
   return data;
 };

@@ -19,6 +19,6 @@ export const isRawImpact = getIsShapedLike<RawImpact>({
 export const isImpact = isRawImpact;
 
 export const parseImpact = (value: unknown): Impact => {
-  assertType(value, isRawImpact);
+  assertType(value, isRawImpact, (x) => `Invalid impact: ${JSON.stringify(x)}`);
   return value;
 };

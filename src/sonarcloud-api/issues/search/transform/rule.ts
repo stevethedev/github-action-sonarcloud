@@ -24,6 +24,6 @@ export const isRawRule = getIsShapedLike<RawRule>({
 export const isRule = isRawRule;
 
 export const parseRule = (value: unknown): Rule => {
-  assertType(value, isRawRule);
+  assertType(value, isRawRule, (x) => `Invalid rule: ${JSON.stringify(x)}`);
   return value;
 };

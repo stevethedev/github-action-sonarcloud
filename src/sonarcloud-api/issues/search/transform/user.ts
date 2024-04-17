@@ -22,6 +22,6 @@ export const isRawUser = getIsShapedLike<RawUser>({
 export const isUser = isRawUser;
 
 export const parseUser = (value: unknown): User => {
-  assertType(value, isRawUser);
+  assertType(value, isRawUser, (x) => `Invalid user: ${JSON.stringify(x)}`);
   return value;
 };

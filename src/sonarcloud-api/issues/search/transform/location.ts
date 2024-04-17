@@ -29,6 +29,10 @@ export const isLocation = getIsShapedLike<Location>({
 });
 
 export const parseLocation = (value: unknown): Location => {
-  assertType(value, isRawLocation);
+  assertType(
+    value,
+    isRawLocation,
+    (x) => `Invalid location: ${JSON.stringify(x)}`,
+  );
   return value;
 };

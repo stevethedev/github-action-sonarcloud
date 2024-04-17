@@ -1,6 +1,6 @@
+import assertType from "@std-types/assert-type";
 import isNumber from "@std-types/is-number";
 import { getIsShapedLike } from "@std-types/is-shaped-like";
-import assertType from "@std-types/assert-type";
 
 export interface RawPaging {
   pageIndex: number;
@@ -19,6 +19,6 @@ export const isRawPaging = getIsShapedLike<RawPaging>({
 export const isPaging = isRawPaging;
 
 export const parsePaging = (value: unknown): Paging => {
-  assertType(value, isRawPaging);
+  assertType(value, isRawPaging, (x) => `Invalid paging: ${JSON.stringify(x)}`);
   return value;
 };
