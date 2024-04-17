@@ -1,5 +1,15 @@
 # github-action-sonarcloud
 
+## 0.4.0
+
+### Minor Changes
+
+- b087bd0: Consolidated the rendering logic
+
+### Patch Changes
+
+- eac6f85: Moved the type-checking to an external library
+
 ## 0.3.7
 
 ### Patch Changes
