@@ -117,7 +117,11 @@ export const isIssue = getIsShapedLike<Issue>({
 });
 
 export const parseIssue = (value: unknown): Issue => {
-  assertType(value, isRawIssue);
+  assertType(
+    value,
+    isRawIssue,
+    (x) => `Invalid issue object: ${JSON.stringify(x)}`,
+  );
 
   return {
     ...value,

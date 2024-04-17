@@ -1,5 +1,5 @@
 import assertType from "@std-types/assert-type";
-import { type Shape, getIsShapedLike } from "@std-types/is-shaped-like";
+import { getIsShapedLike, type Shape } from "@std-types/is-shaped-like";
 import isString from "@std-types/is-string";
 
 export interface RawOrganization {
@@ -21,6 +21,10 @@ export const isRawOrganization =
   getIsShapedLike<RawOrganization>(organizationShape);
 
 export const parseOrganization = (data: unknown): Organization => {
-  assertType(data, isRawOrganization);
+  assertType(
+    data,
+    isRawOrganization,
+    (x) => `Invalid organization: ${JSON.stringify(x)}`,
+  );
   return data;
 };

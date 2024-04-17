@@ -1,11 +1,11 @@
-import assertType from "@std-types/assert-type";
-import { getIsEnum } from "@std-types/is-enum";
-import { type Shape, getIsShapedLike } from "@std-types/is-shaped-like";
-import isString from "@std-types/is-string";
 import { isDate } from "@/types/date";
+import assertType from "@std-types/assert-type";
 import isArray from "@std-types/is-array";
-import isNumber from "@std-types/is-number";
 import isBoolean from "@std-types/is-boolean";
+import { getIsEnum } from "@std-types/is-enum";
+import isNumber from "@std-types/is-number";
+import { getIsShapedLike, type Shape } from "@std-types/is-shaped-like";
+import isString from "@std-types/is-string";
 
 export enum Status {
   Success = "SUCCESS",
@@ -79,7 +79,7 @@ export const taskShape: Shape<Task> = {
 export const isTask = getIsShapedLike<Task>(taskShape);
 
 export const parseTask = (data: unknown): Task => {
-  assertType(data, isRawTask);
+  assertType(data, isRawTask, (x) => `Invalid task: ${JSON.stringify(x)}`);
 
   return {
     ...data,

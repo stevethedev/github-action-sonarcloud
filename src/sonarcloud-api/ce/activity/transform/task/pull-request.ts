@@ -1,7 +1,7 @@
 import assertType from "@std-types/assert-type";
-import { type Shape, getIsShapedLike } from "@std-types/is-shaped-like";
+import { getIsShapedLike, type Shape } from "@std-types/is-shaped-like";
 import isString from "@std-types/is-string";
-import { type Task, type RawTask, parseTask, taskShape, rawTaskShape } from ".";
+import { parseTask, type RawTask, rawTaskShape, type Task, taskShape } from ".";
 
 export interface RawPullRequestTask extends RawTask {
   pullRequest: string;
@@ -28,7 +28,11 @@ export const isPullRequestTask =
   getIsShapedLike<PullRequestTask>(pullRequestTaskShape);
 
 export const parsePullRequestTask = (data: unknown): PullRequestTask => {
-  assertType(data, isRawPullRequestTask);
+  assertType(
+    data,
+    isRawPullRequestTask,
+    (x) => `Invalid pull request task: ${JSON.stringify(x)}`,
+  );
   const task = parseTask(data);
 
   return {

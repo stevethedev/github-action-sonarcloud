@@ -23,6 +23,10 @@ export const isRawApiResponse =
 export const isApiResponse = getIsShapedLike<ApiResponse>(apiResponseShape);
 
 export const parseApiResponse = (data: unknown): ApiResponse => {
-  assertType(data, isRawApiResponse);
+  assertType(
+    data,
+    isRawApiResponse,
+    (x) => `Invalid API response: ${JSON.stringify(x)}`,
+  );
   return { projectStatus: parseProjectStatus(data.projectStatus) };
 };

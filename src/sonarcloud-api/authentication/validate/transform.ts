@@ -1,6 +1,6 @@
 import assertType from "@std-types/assert-type";
 import isBoolean from "@std-types/is-boolean";
-import { type Shape, getIsShapedLike } from "@std-types/is-shaped-like";
+import { getIsShapedLike, type Shape } from "@std-types/is-shaped-like";
 
 export interface RawResult {
   valid: boolean;
@@ -15,6 +15,6 @@ export const isRawResult = getIsShapedLike<RawResult>(rawResultShape);
 export const isResult = getIsShapedLike<Result>(resultShape);
 
 export const transform = (data: unknown): Result => {
-  assertType(data, isRawResult);
+  assertType(data, isRawResult, (x) => `Invalid result: ${JSON.stringify(x)}`);
   return data;
 };

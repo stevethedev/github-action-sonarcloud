@@ -1,8 +1,8 @@
 import { isDate } from "@/types/date";
-import isBoolean from "@std-types/is-boolean";
-import { type Shape, getIsShapedLike } from "@std-types/is-shaped-like";
-import isString from "@std-types/is-string";
 import assertType from "@std-types/assert-type";
+import isBoolean from "@std-types/is-boolean";
+import { getIsShapedLike, type Shape } from "@std-types/is-shaped-like";
+import isString from "@std-types/is-string";
 
 export interface RawComment {
   key: string;
@@ -34,7 +34,11 @@ export const isComment = getIsShapedLike<Comment>({
 });
 
 export const parseComment = (value: unknown): Comment => {
-  assertType(value, isRawComment);
+  assertType(
+    value,
+    isRawComment,
+    (x) => `Invalid comment: ${JSON.stringify(x)}`,
+  );
 
   return {
     ...value,

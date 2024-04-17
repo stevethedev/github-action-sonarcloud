@@ -28,6 +28,10 @@ export interface Component extends RawComponent {}
 export const isComponent = isRawComponent;
 
 export const parseComponent = (value: unknown): Component => {
-  assertType(value, isRawComponent);
+  assertType(
+    value,
+    isRawComponent,
+    (value) => `Invalid component: ${JSON.stringify(value)}`,
+  );
   return value;
 };

@@ -36,7 +36,11 @@ export const isProjectStatus = getIsShapedLike<ProjectStatus>(
 );
 
 export const parseProjectStatus = (data: unknown): ProjectStatus => {
-  assertType(data, isRawProjectStatus);
+  assertType(
+    data,
+    isRawProjectStatus,
+    (x) => `Invalid project status: ${JSON.stringify(x)}`,
+  );
   return {
     ...data,
     conditions: data.conditions.map(parseCondition),

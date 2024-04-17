@@ -1,7 +1,7 @@
 import assertType from "@std-types/assert-type";
-import { type Shape, getIsShapedLike } from "@std-types/is-shaped-like";
+import { getIsShapedLike, type Shape } from "@std-types/is-shaped-like";
 import isString from "@std-types/is-string";
-import { type RawTask, type Task, rawTaskShape, taskShape, parseTask } from ".";
+import { parseTask, type RawTask, rawTaskShape, type Task, taskShape } from ".";
 
 export interface RawBranchTask extends RawTask {
   branch: string;
@@ -29,7 +29,11 @@ export const isRawBranchTask =
 export const isBranchTask = getIsShapedLike<BranchTask>(branchTaskShape);
 
 export const parseBranchTask = (data: unknown): BranchTask => {
-  assertType(data, isRawBranchTask);
+  assertType(
+    data,
+    isRawBranchTask,
+    (x) => `Invalid branch task: ${JSON.stringify(x)}`,
+  );
 
   return {
     ...parseTask(data),
