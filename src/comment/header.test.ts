@@ -1,11 +1,15 @@
-import { header } from "./header";
+import h from "./header";
 
-describe("header", () => {
-  it("should return a header", () => {
-    expect(header(1, "Header")).toBe("# Header");
+describe("h", () => {
+  it("should return h1", () => {
+    expect(h({ level: 1, text: "Hello, World!" })).toBe("# Hello, World!");
   });
 
-  it("should return a header with multiple hashes", () => {
-    expect(header(3, "Header")).toBe("### Header");
+  it("should return h2", () => {
+    expect(h({ level: 2, text: "Hello, World!" })).toBe("## Hello, World!");
+  });
+
+  it("should return h3", () => {
+    expect(h({ level: 3, text: "Hello, World!" })).toBe("### Hello, World!");
   });
 });

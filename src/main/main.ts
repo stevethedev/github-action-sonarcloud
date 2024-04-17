@@ -1,11 +1,11 @@
-import { header } from "@/comment/header";
+import getComment, { type Props } from "@/comment";
+import { type Comment } from "@/github/comment";
+import { validateIssues } from "@/main/validate-issues";
 import { validatePullRequest } from "@/main/validate-pull-request";
+import { validateTaskComplete } from "@/main/validate-task-complete";
 import { requestFactory } from "@/request";
 import isNumber from "@std-types/is-number";
 import { validateCredentials } from "./validate-credentials";
-import { type Comment } from "@/comment";
-import { validateIssues } from "@/main/validate-issues";
-import { validateTaskComplete } from "@/main/validate-task-complete";
 
 export interface MainOptions {
   commentId?: number;
@@ -34,30 +34,46 @@ export const main = async (
     fetch,
   });
 
-  comment.push(header(1, "SonarCloud Analysis"));
+  const props: Props = {
+    isAuthenticated: false,
+    isTaskComplete: false,
+    newCodeSummaryUrl: "",
+    issues: [],
+    ratings: [],
+    isPass: false,
+  };
 
-  const isCredentialsValid = await validateCredentials(sonarRequest, comment);
-  if (!isCredentialsValid) {
-    await comment.post();
-    return false;
+  props.isAuthenticated = await validateCredentials(sonarRequest);
+  props.newCodeSummaryUrl = sonarRequest.getUrl("summary/new_code", {
+    id: projectKey,
+    pullRequest: String(pullRequest),
+  });
+
+  if (props.isAuthenticated) {
+    props.isTaskComplete = await validateTaskComplete(sonarRequest, {
+      projectKey,
+      pullRequest,
+    });
   }
 
-  await validateTaskComplete(sonarRequest, comment, {
-    projectKey,
-    pullRequest,
-  });
+  if (props.isTaskComplete) {
+    const prResult = await validatePullRequest(sonarRequest, {
+      projectKey,
+      pullRequest,
+    });
+    props.isPass = prResult.isOk;
+    props.ratings = prResult.conditions;
 
-  const isPullRequestValid = await validatePullRequest(sonarRequest, comment, {
-    projectKey,
-    pullRequest,
-  });
+    props.issues = await validateIssues(sonarRequest, {
+      projectKey,
+      pullRequest,
+    });
+  }
 
-  const isIssuesValid = await validateIssues(sonarRequest, comment, {
-    projectKey,
-    pullRequest,
-  });
+  const body = getComment(props);
 
+  comment.push(body);
   await comment.post();
 
-  return isPullRequestValid && isIssuesValid;
+  return props.isPass;
 };
