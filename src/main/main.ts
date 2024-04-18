@@ -53,6 +53,9 @@ export const main = async (
     props.isTaskComplete = await validateTaskComplete(sonarRequest, {
       projectKey,
       pullRequest,
+    }).catch((error) => {
+      console.warn("Failed to validate task complete", error);
+      return false;
     });
   }
 
