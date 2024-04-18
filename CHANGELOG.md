@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.4.2
+
+### Patch Changes
+
+- 756c1fe: Prevented task-validation failure from prematurely ending the scan
+
 ## 0.4.1
 
 ### Patch Changes
