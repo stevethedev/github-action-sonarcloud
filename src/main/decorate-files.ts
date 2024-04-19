@@ -22,6 +22,10 @@ export default async (
   const files = await prFiles.getFileRecords();
 
   const ruleKeys = new Set(issues.map((issue) => issue.rule).filter(isString));
+  if (ruleKeys.size === 0) {
+    return;
+  }
+
   const { rules } = await searchRules(sonarRequest, {
     organization: sonarOrganization,
     rule_keys: Array.from(ruleKeys),
