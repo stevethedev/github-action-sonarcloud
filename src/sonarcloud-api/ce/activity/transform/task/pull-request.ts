@@ -19,6 +19,9 @@ const rawPullRequestTaskShape: Shape<RawPullRequestTask> = {
 const pullRequestTaskShape: Shape<PullRequestTask> = {
   ...rawPullRequestTaskShape,
   ...taskShape,
+  submittedAt: taskShape.submittedAt,
+  startedAt: taskShape.startedAt,
+  executedAt: taskShape.executedAt,
 };
 
 export const isRawPullRequestTask = getIsShapedLike<RawPullRequestTask>(

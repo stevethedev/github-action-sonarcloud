@@ -30,9 +30,9 @@ describe("parsePullRequestTask", () => {
     };
     const pullRequestTask: PullRequestTask = {
       ...rawPullRequestTask,
-      submittedAt: new Date(rawPullRequestTask.submittedAt),
-      startedAt: new Date(rawPullRequestTask.startedAt),
-      executedAt: new Date(rawPullRequestTask.executedAt),
+      submittedAt: new Date(rawPullRequestTask.submittedAt!),
+      startedAt: new Date(rawPullRequestTask.startedAt!),
+      executedAt: new Date(rawPullRequestTask.executedAt!),
     };
     expect(parsePullRequestTask(rawPullRequestTask)).toEqual(pullRequestTask);
   });

@@ -22,6 +22,9 @@ const rawBranchTaskShape: Shape<RawBranchTask> = {
 const branchTaskShape: Shape<BranchTask> = {
   ...rawBranchTaskShape,
   ...taskShape,
+  submittedAt: taskShape.submittedAt,
+  startedAt: taskShape.startedAt,
+  executedAt: taskShape.executedAt,
 };
 
 export const isRawBranchTask =
