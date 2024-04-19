@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.5.3
+
+### Patch Changes
+
+- c86c832: Make parsing activity responses less aggressive
+
 ## 0.5.2
 
 ### Patch Changes
