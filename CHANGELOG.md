@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.5.2
+
+### Patch Changes
+
+- 3ae6c28: Treat the inability to validate task-status as an assumption that it's ready
+
 ## 0.5.1
 
 ### Patch Changes
