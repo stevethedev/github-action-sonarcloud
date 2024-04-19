@@ -9,7 +9,7 @@ describe("parseSoftwareQuality", () => {
 
   it("should throw an error if the software quality is invalid", () => {
     expect(() => parseSoftwareQuality("INVALID_SOFTWARE_QUALITY")).toThrowError(
-      "Invalid software quality: INVALID_SOFTWARE_QUALITY",
+      'Invalid software quality: "INVALID_SOFTWARE_QUALITY"',
     );
   });
 });

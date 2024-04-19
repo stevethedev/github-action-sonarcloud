@@ -1,5 +1,12 @@
 # github-action-sonarcloud
 
+## 0.5.1
+
+### Patch Changes
+
+- 85a9df8: Short-circuit rule-fetching when there are no rules to fetch
+- 4f9ef5d: Add more descriptive error messages while parsing API responses
+
 ## 0.5.0
 
 ### Minor Changes

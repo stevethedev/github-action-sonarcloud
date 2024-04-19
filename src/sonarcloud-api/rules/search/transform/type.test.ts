@@ -9,7 +9,7 @@ describe("parseType", () => {
 
   it("should throw an error if the type is invalid", () => {
     expect(() => parseType("INVALID_TYPE")).toThrowError(
-      "Invalid type: INVALID_TYPE",
+      'Invalid type: "INVALID_TYPE"',
     );
   });
 });

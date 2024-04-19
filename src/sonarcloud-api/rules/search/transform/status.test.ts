@@ -9,7 +9,7 @@ describe("parseStatus", () => {
 
   it("should throw an error if the status is invalid", () => {
     expect(() => parseStatus("INVALID_STATUS")).toThrowError(
-      "Invalid status: INVALID_STATUS",
+      'Invalid status: "INVALID_STATUS"',
     );
   });
 });

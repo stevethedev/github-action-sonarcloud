@@ -9,7 +9,7 @@ describe("parseSeverity", () => {
 
   it("should throw an error if the severity is invalid", () => {
     expect(() => parseSeverity("INVALID_SEVERITY")).toThrowError(
-      "Invalid severity: INVALID_SEVERITY",
+      'Invalid severity: "INVALID_SEVERITY"',
     );
   });
 });
