@@ -1,13 +1,15 @@
 import assertType from "@std-types/assert-type";
 import { getIsArray } from "@std-types/is-array";
 import isNumber from "@std-types/is-number";
+import { getIsOneOf } from "@std-types/is-one-of";
 import { getIsShapedLike } from "@std-types/is-shaped-like";
+import isUndefined from "@std-types/is-undefined";
 import { isRawRule, isRule, parseRule, type RawRule, type Rule } from "./rule";
 
 export interface RawApiResponse {
-  total: number;
-  p: number;
-  ps: number;
+  total?: number;
+  p?: number;
+  ps?: number;
   rules: RawRule[];
 }
 
@@ -16,9 +18,9 @@ export interface ApiResponse extends Omit<RawApiResponse, "rules"> {
 }
 
 export const isApiResponse = getIsShapedLike<ApiResponse>({
-  total: isNumber,
-  p: isNumber,
-  ps: isNumber,
+  total: getIsOneOf(isUndefined, isNumber),
+  p: getIsOneOf(isUndefined, isNumber),
+  ps: getIsOneOf(isUndefined, isNumber),
   rules: getIsArray(isRule),
 });
 

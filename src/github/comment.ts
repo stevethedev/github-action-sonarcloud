@@ -14,7 +14,7 @@ export interface PostOptions {
   issueKey: string;
 }
 
-const QUALITY_GATE_COMMENT = "<!-- sonarcloud-quality-gate -->";
+export const QUALITY_GATE_COMMENT = "<!-- sonarcloud-quality-gate -->";
 
 export class CommentManager {
   private octokit: InstanceType<typeof GitHub>;
