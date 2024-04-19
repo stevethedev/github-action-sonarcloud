@@ -1,7 +1,9 @@
 import assertType from "@std-types/assert-type";
-import { getIsArray } from "@std-types/is-array";
+import isArray, { getIsArray } from "@std-types/is-array";
+import isNumber from "@std-types/is-number";
 import { getIsOneOf } from "@std-types/is-one-of";
 import { getIsShapedLike } from "@std-types/is-shaped-like";
+import isString from "@std-types/is-string";
 import isUndefined from "@std-types/is-undefined";
 import {
   type Component,
@@ -19,23 +21,48 @@ import {
 import { isRawRule, parseRule, type RawRule, type Rule } from "./rule";
 import { isRawUser, parseUser, type RawUser, type User } from "./user";
 
-interface RawApiResponse {
-  paging: RawPaging;
+export interface RawApiResponse {
+  total?: number;
+  p?: number;
+  ps?: number;
+  effortTotal?: number;
+  debtTotal?: number;
+  paging?: RawPaging;
   issues?: RawIssue[];
   components?: RawComponent[];
   rules?: RawRule[];
   users?: RawUser[];
+  organizations?: Array<{ key?: string; name?: string }>;
+  facets?: unknown[];
 }
 
 const isRawApiResponse = getIsShapedLike<RawApiResponse>({
-  paging: isRawPaging,
+  total: getIsOneOf(isUndefined, isNumber),
+  p: getIsOneOf(isUndefined, isNumber),
+  ps: getIsOneOf(isUndefined, isNumber),
+  effortTotal: getIsOneOf(isUndefined, isNumber),
+  debtTotal: getIsOneOf(isUndefined, isNumber),
+  paging: getIsOneOf(isUndefined, isRawPaging),
   issues: getIsOneOf(isUndefined, getIsArray(isRawIssue)),
   components: getIsOneOf(isUndefined, getIsArray(isRawComponent)),
   rules: getIsOneOf(isUndefined, getIsArray(isRawRule)),
   users: getIsOneOf(isUndefined, getIsArray(isRawUser)),
+  organizations: getIsOneOf(
+    isUndefined,
+    getIsArray(
+      getIsShapedLike({
+        key: getIsOneOf(isUndefined, isString),
+        name: getIsOneOf(isUndefined, isString),
+      }),
+    ),
+  ),
+  facets: getIsOneOf(isUndefined, isArray),
 });
 
 export interface ApiResponse {
+  total?: number;
+  p?: number;
+  ps?: number;
   paging: Paging;
   issues: Issue[];
   components: Component[];
@@ -51,6 +78,7 @@ export const parseApiResponse = (value: unknown): ApiResponse => {
   );
 
   return {
+    ...value,
     paging: parsePaging(value.paging),
     issues: (value.issues ?? []).map(parseIssue),
     components: (value.components ?? []).map(parseComponent),

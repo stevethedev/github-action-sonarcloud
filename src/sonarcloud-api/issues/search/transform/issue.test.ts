@@ -96,12 +96,10 @@ describe("parseIssue", () => {
       creationDate: new Date(rawIssue.creationDate!),
       updateDate: new Date(rawIssue.updateDate!),
       file: "foo/bar/file.ts",
-      comments: [
-        ...rawIssue.comments.map((comment) => ({
-          ...comment,
-          createdAt: new Date(comment.createdAt),
-        })),
-      ],
+      comments: rawIssue.comments?.map((comment) => ({
+        ...comment,
+        createdAt: new Date(comment.createdAt),
+      })),
     };
 
     expect(parseIssue(rawIssue)).toEqual(issue);

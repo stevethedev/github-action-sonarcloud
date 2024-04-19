@@ -42,20 +42,24 @@ export interface RawIssue {
   hash?: string;
   author?: string;
   effort?: string;
+  debt?: string;
+  assignee?: string;
   creationDate?: string;
   updateDate?: string;
-  tags: string[];
+  tags?: string[];
   type?: string;
-  comments: RawComment[];
+  organization?: string;
+  pullRequest?: string;
+  comments?: RawComment[];
   attr?: Attr;
-  transitions: string[];
-  actions: string[];
+  transitions?: string[];
+  actions?: string[];
   textRange?: RawTextRange;
-  flows: RawFlow[];
+  flows?: RawFlow[];
   ruleDescriptionContextKey?: string;
   cleanCodeAttributeCategory?: string;
   cleanCodeAttribute?: string;
-  impacts: RawImpact[];
+  impacts?: RawImpact[];
 }
 
 export interface Issue
@@ -71,11 +75,11 @@ export interface Issue
   > {
   creationDate?: Date;
   updateDate?: Date;
-  comments: Comment[];
+  comments?: Comment[];
   attr?: Attr;
   textRange?: TextRange;
-  flows: Flow[];
-  impacts: Impact[];
+  flows?: Flow[];
+  impacts?: Impact[];
   file?: string;
 }
 
@@ -94,18 +98,18 @@ const rawIssueShape: Shape<RawIssue> = {
   effort: getIsOneOf(isString, isUndefined),
   creationDate: getIsOneOf(isString, isUndefined),
   updateDate: getIsOneOf(isString, isUndefined),
-  tags: getIsArray(isString),
+  tags: getIsOneOf(isUndefined, getIsArray(isString)),
   type: getIsOneOf(isString, isUndefined),
-  comments: getIsArray(isRawComment),
+  comments: getIsOneOf(isUndefined, getIsArray(isRawComment)),
   attr: getIsOneOf(isRawAttr, isUndefined),
-  transitions: getIsArray(isString),
-  actions: getIsArray(isString),
+  transitions: getIsOneOf(getIsArray(isString), isUndefined),
+  actions: getIsOneOf(isUndefined, getIsArray(isString)),
   textRange: getIsOneOf(isRawTextRange, isUndefined),
-  flows: getIsArray(isRawFlow),
+  flows: getIsOneOf(isUndefined, getIsArray(isRawFlow)),
   ruleDescriptionContextKey: getIsOneOf(isString, isUndefined),
   cleanCodeAttributeCategory: getIsOneOf(isString, isUndefined),
   cleanCodeAttribute: getIsOneOf(isString, isUndefined),
-  impacts: getIsArray(isRawImpact),
+  impacts: getIsOneOf(isUndefined, getIsArray(isRawImpact)),
 };
 
 export const isRawIssue = getIsShapedLike<RawIssue>(rawIssueShape);
@@ -114,7 +118,7 @@ export const isIssue = getIsShapedLike<Issue>({
   ...rawIssueShape,
   creationDate: getIsOneOf(isDate, isUndefined),
   updateDate: getIsOneOf(isDate, isUndefined),
-  comments: getIsArray(isComment),
+  comments: getIsOneOf(isUndefined, getIsArray(isComment)),
 });
 
 export const parseIssue = (value: unknown): Issue => {
@@ -133,12 +137,12 @@ export const parseIssue = (value: unknown): Issue => {
     updateDate: isDefined(value.updateDate)
       ? new Date(value.updateDate)
       : undefined,
-    comments: value.comments.map(parseComment),
+    comments: value.comments?.map(parseComment),
     textRange: isDefined(value.textRange)
       ? parseTextRange(value.textRange)
       : undefined,
-    flows: value.flows.map(parseFlow),
-    impacts: value.impacts.map(parseImpact),
+    flows: value.flows?.map(parseFlow),
+    impacts: value.impacts?.map(parseImpact),
     file: value.component?.replace(new RegExp(`^${value.project}:`), ""),
   };
 
