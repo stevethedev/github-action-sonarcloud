@@ -1,3 +1,4 @@
+import { TaskStatus } from "@/comment/body";
 import passIcon from "@/comment/icon/pass-icon";
 import { stripIndent } from "common-tags";
 import main, { type Props } from "./main";
@@ -6,7 +7,7 @@ describe("main", () => {
   it("should return list of ratings", () => {
     const props: Props = {
       isAuthenticated: true,
-      isTaskComplete: true,
+      taskStatus: TaskStatus.Complete,
       isPass: true,
       newCodeSummaryUrl: "https://new-code-summary.com",
       ratings: [

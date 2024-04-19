@@ -4,18 +4,20 @@ import unauthenticatedBody from "./unauthenticated-body";
 
 export interface Props extends ABProps {
   isAuthenticated: boolean;
-  isTaskComplete: boolean;
+  taskStatus: TaskStatus;
 }
 
-export default ({
-  isAuthenticated,
-  isTaskComplete,
-  ...rest
-}: Props): string => {
+export enum TaskStatus {
+  Incomplete,
+  Complete,
+  Unknown,
+}
+
+export default ({ isAuthenticated, taskStatus, ...rest }: Props): string => {
   if (!isAuthenticated) {
     return unauthenticatedBody();
   }
-  if (!isTaskComplete) {
+  if (taskStatus === TaskStatus.Incomplete) {
     return taskIncompleteBody();
   }
   return authenticatedBody(rest);

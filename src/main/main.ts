@@ -1,4 +1,5 @@
 import getComment, { type Props } from "@/comment";
+import { TaskStatus } from "@/comment/body";
 import { type CommentManager } from "@/github/comment";
 import { type PrFiles } from "@/github/pr-files";
 import decorateFiles from "@/main/decorate-files";
@@ -40,7 +41,7 @@ export const main = async (
 
   const props: Props = {
     isAuthenticated: false,
-    isTaskComplete: false,
+    taskStatus: TaskStatus.Incomplete,
     newCodeSummaryUrl: "",
     issues: [],
     ratings: [],
@@ -54,13 +55,20 @@ export const main = async (
   });
 
   if (props.isAuthenticated) {
-    props.isTaskComplete = await validateTaskComplete(sonarRequest, {
+    props.taskStatus = await validateTaskComplete(sonarRequest, {
       projectKey,
       pullRequest,
-    }).catch((error) => {
-      console.warn("Failed to validate task complete", error);
-      return false;
-    });
+    })
+      .then((isTaskComplete) =>
+        isTaskComplete ? TaskStatus.Complete : TaskStatus.Incomplete,
+      )
+      .catch((error) => {
+        console.warn(
+          "Failed to validate task complete, proceeding as if task is completed",
+          error,
+        );
+        return TaskStatus.Unknown;
+      });
 
     const issues = (props.issues = await validateIssues(sonarRequest, {
       projectKey,
@@ -75,7 +83,7 @@ export const main = async (
     });
   }
 
-  if (props.isTaskComplete) {
+  if ([TaskStatus.Unknown, TaskStatus.Complete].includes(props.taskStatus)) {
     const prResult = await validatePullRequest(sonarRequest, {
       projectKey,
       pullRequest,

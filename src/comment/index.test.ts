@@ -1,3 +1,4 @@
+import { TaskStatus } from "@/comment/body";
 import { stripIndent } from "common-tags";
 import getComment from "./index";
 
@@ -5,7 +6,7 @@ describe("getComment", () => {
   it("should return the unauthenticated body", () => {
     const body = getComment({
       isAuthenticated: false,
-      isTaskComplete: true,
+      taskStatus: TaskStatus.Unknown,
       newCodeSummaryUrl: "bar",
       isPass: true,
       issues: [],
