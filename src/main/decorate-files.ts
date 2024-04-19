@@ -1,10 +1,12 @@
 import issueComment from "@/comment/issue-comment";
 import type { PostOptions } from "@/github/comment";
 import { type CommentManager } from "@/github/comment";
+import type { PrFileRecord } from "@/github/pr-files";
 import { type PrFiles } from "@/github/pr-files";
 import { type IssueWithUrl } from "@/main/validate-issues";
 import { type RequestFn } from "@/request/factory";
 import searchRules from "@/sonarcloud-api/rules/search";
+import type { Rule } from "@/sonarcloud-api/rules/search/transform/rule";
 import isString from "@std-types/is-string";
 
 export interface Options {
@@ -26,7 +28,18 @@ export default async (
     f: ["name", "descriptionSections"],
   });
 
-  const promises = issues.map(async (issue) => {
+  await Promise.all(issues.map(prepareComment({ comment, files, rules })));
+};
+
+export interface PrepareCommentOptions {
+  comment: CommentManager;
+  files: PrFileRecord[];
+  rules: Partial<Record<string, Rule>>;
+}
+
+export const prepareComment =
+  ({ files, rules, comment }: PrepareCommentOptions) =>
+  async (issue: IssueWithUrl): Promise<void> => {
     const file = files.find((file) => file.filename === issue.component);
     if (!file?.commitId || !issue?.rule) {
       return;
@@ -45,8 +58,6 @@ export default async (
     };
 
     const body = issueComment({ issue, rule });
-    await comment.post(body, options);
-  });
 
-  await Promise.all(promises);
-};
+    await comment.post(body, options);
+  };

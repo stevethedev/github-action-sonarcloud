@@ -7,7 +7,7 @@ export interface Options {
   githubContext: typeof context;
 }
 
-interface PrFileRecord {
+export interface PrFileRecord {
   filename: string;
   commitId: string | null;
 }

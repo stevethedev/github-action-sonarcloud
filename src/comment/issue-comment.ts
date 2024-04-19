@@ -37,7 +37,7 @@ const introduction = (rule: Rule) => {
       (section) => section.key === "introduction",
     ) ?? null;
 
-  return found?.content ?? null;
+  return found?.content ?? "<!-- No introduction -->";
 };
 
 const rootCause = (rule: Rule) => {
@@ -46,7 +46,7 @@ const rootCause = (rule: Rule) => {
     null;
 
   if (!found) {
-    return null;
+    return "<!-- No root cause -->";
   }
 
   return stripIndent(html)`
@@ -64,7 +64,7 @@ const howToFixIt = (rule: Rule) => {
     null;
 
   if (!found) {
-    return null;
+    return "<!-- No fix -->";
   }
 
   return stripIndent(html)`
@@ -82,7 +82,7 @@ const resources = (rule: Rule) => {
     null;
 
   if (!found) {
-    return null;
+    return "<!-- No resources -->";
   }
 
   // Increase all headings by one level
@@ -103,7 +103,10 @@ const resources = (rule: Rule) => {
 };
 
 const impacts = ({ impacts }: Rule) => {
-  if (!impacts?.length) return null;
+  if (!impacts?.length) {
+    return "<!-- No impacts -->";
+  }
+
   return stripIndent`
     ${h3({ text: "Software qualities impacted:" })}
     
@@ -114,6 +117,8 @@ const impacts = ({ impacts }: Rule) => {
 };
 
 const effort = ({ effort }: IssueWithUrl) => {
-  if (!effort) return null;
+  if (!effort) {
+    return "<!-- No effort -->";
+  }
   return stripIndent`<sup>Effort to fix: ${effort}</sup>`;
 };
