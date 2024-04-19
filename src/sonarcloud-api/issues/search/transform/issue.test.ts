@@ -74,7 +74,7 @@ describe("parseIssue", () => {
       key: "key",
       rule: "rule",
       severity: "severity",
-      component: "component",
+      component: "project:foo/bar/file.ts",
       project: "project",
       line: 1,
       textRange: { startLine: 1, endLine: 1, startOffset: 1, endOffset: 1 },
@@ -95,12 +95,11 @@ describe("parseIssue", () => {
       ...rawIssue,
       creationDate: new Date(rawIssue.creationDate!),
       updateDate: new Date(rawIssue.updateDate!),
-      comments: [
-        ...rawIssue.comments.map((comment) => ({
-          ...comment,
-          createdAt: new Date(comment.createdAt),
-        })),
-      ],
+      file: "foo/bar/file.ts",
+      comments: rawIssue.comments?.map((comment) => ({
+        ...comment,
+        createdAt: new Date(comment.createdAt),
+      })),
     };
 
     expect(parseIssue(rawIssue)).toEqual(issue);

@@ -1,5 +1,7 @@
 import getComment, { type Props } from "@/comment";
-import { type Comment } from "@/github/comment";
+import { type CommentManager } from "@/github/comment";
+import { type PrFiles } from "@/github/pr-files";
+import decorateFiles from "@/main/decorate-files";
 import { validateIssues } from "@/main/validate-issues";
 import { validatePullRequest } from "@/main/validate-pull-request";
 import { validateTaskComplete } from "@/main/validate-task-complete";
@@ -12,17 +14,19 @@ export interface MainOptions {
   projectKey: string;
   sonarUrl: string;
   sonarToken: string;
+  sonarOrganization: string;
 }
 
 export interface MainContext {
   pullRequest?: number;
   fetch: typeof global.fetch;
-  comment: Comment;
+  comment: CommentManager;
+  prFiles: PrFiles;
 }
 
 export const main = async (
-  { fetch, comment, pullRequest }: MainContext,
-  { sonarToken, sonarUrl, projectKey }: MainOptions,
+  { fetch, comment, pullRequest, prFiles }: MainContext,
+  { sonarToken, sonarUrl, projectKey, sonarOrganization }: MainOptions,
 ): Promise<boolean> => {
   if (!isNumber(pullRequest)) {
     return true;
@@ -57,6 +61,18 @@ export const main = async (
       console.warn("Failed to validate task complete", error);
       return false;
     });
+
+    const issues = (props.issues = await validateIssues(sonarRequest, {
+      projectKey,
+      pullRequest,
+    }));
+
+    await decorateFiles(sonarRequest, {
+      comment,
+      prFiles,
+      issues,
+      sonarOrganization,
+    });
   }
 
   if (props.isTaskComplete) {
@@ -66,17 +82,10 @@ export const main = async (
     });
     props.isPass = prResult.isOk;
     props.ratings = prResult.conditions;
-
-    props.issues = await validateIssues(sonarRequest, {
-      projectKey,
-      pullRequest,
-    });
   }
 
   const body = getComment(props);
-
-  comment.push(body);
-  await comment.post();
+  await comment.post(body);
 
   return props.isPass;
 };

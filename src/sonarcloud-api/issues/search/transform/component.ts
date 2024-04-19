@@ -7,11 +7,14 @@ import isUndefined from "@std-types/is-undefined";
 
 export interface RawComponent {
   key: string;
+  organization?: string;
+  uuid?: string;
   enabled?: boolean;
   qualifier?: string;
   name?: string;
   longName?: string;
   path?: string;
+  pullRequest?: string;
 }
 
 export const isRawComponent = getIsShapedLike<RawComponent>({
@@ -21,6 +24,9 @@ export const isRawComponent = getIsShapedLike<RawComponent>({
   name: getIsOneOf(isString, isUndefined),
   longName: getIsOneOf(isString, isUndefined),
   path: getIsOneOf(isString, isUndefined),
+  pullRequest: getIsOneOf(isString, isUndefined),
+  organization: getIsOneOf(isString, isUndefined),
+  uuid: getIsOneOf(isString, isUndefined),
 });
 
 export interface Component extends RawComponent {}
