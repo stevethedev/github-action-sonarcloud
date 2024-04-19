@@ -76,6 +76,7 @@ export interface Issue
   textRange?: TextRange;
   flows: Flow[];
   impacts: Impact[];
+  file?: string;
 }
 
 const rawIssueShape: Shape<RawIssue> = {
@@ -123,7 +124,7 @@ export const parseIssue = (value: unknown): Issue => {
     (x) => `Invalid issue object: ${JSON.stringify(x)}`,
   );
 
-  return {
+  const issue: Issue = {
     ...value,
     attr: isDefined(value.attr) ? parseAttr(value.attr) : undefined,
     creationDate: isDefined(value.creationDate)
@@ -138,5 +139,12 @@ export const parseIssue = (value: unknown): Issue => {
       : undefined,
     flows: value.flows.map(parseFlow),
     impacts: value.impacts.map(parseImpact),
+    file: value.component?.replace(new RegExp(`^${value.project}:`), ""),
   };
+
+  const entries = Object.entries(issue).filter(([, v]) => isDefined(v));
+  const result = Object.fromEntries(entries);
+
+  assertType(result, isIssue);
+  return result;
 };

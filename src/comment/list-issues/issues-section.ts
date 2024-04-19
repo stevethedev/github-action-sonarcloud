@@ -9,7 +9,7 @@ export interface Props {
   readonly title: string;
   readonly issues: Pick<
     IssueWithUrl,
-    "severity" | "effort" | "message" | "url"
+    "severity" | "effort" | "message" | "url" | "component"
   >[];
 }
 

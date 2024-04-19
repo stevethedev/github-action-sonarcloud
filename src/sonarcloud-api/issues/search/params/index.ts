@@ -43,7 +43,7 @@ export interface Params {
   pullRequest?: string;
   resolutions?: Resolution[];
   resolved?: boolean;
-  rules?: `${string}:${string}`[];
+  rules?: string[];
   s?: SortField;
   sansTop25?: SansTopTwentyFive[];
   sinceLeakPeriod?: boolean;
