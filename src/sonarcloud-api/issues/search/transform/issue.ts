@@ -122,11 +122,7 @@ export const isIssue = getIsShapedLike<Issue>({
 });
 
 export const parseIssue = (value: unknown): Issue => {
-  assertType(
-    value,
-    isRawIssue,
-    (x) => `Invalid issue object: ${JSON.stringify(x)}`,
-  );
+  assertType(value, isRawIssue, (x) => `Invalid issue: ${JSON.stringify(x)}`);
 
   const issue: Issue = {
     ...value,
@@ -149,6 +145,10 @@ export const parseIssue = (value: unknown): Issue => {
   const entries = Object.entries(issue).filter(([, v]) => isDefined(v));
   const result = Object.fromEntries(entries);
 
-  assertType(result, isIssue);
+  assertType(
+    result,
+    isIssue,
+    (x) => `Invalid issue object: ${JSON.stringify(x)}`,
+  );
   return result;
 };

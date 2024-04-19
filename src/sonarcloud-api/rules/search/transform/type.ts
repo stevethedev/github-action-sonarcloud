@@ -12,6 +12,6 @@ export const isType = getIsEnum(Type);
 export { Type as RawType, isType as isRawType };
 
 export const parseType = (value: unknown): Type => {
-  assertType(value, isType, (type) => `Invalid type: ${type}`.trim());
+  assertType(value, isType, (type) => `Invalid type: ${JSON.stringify(type)}`);
   return value;
 };

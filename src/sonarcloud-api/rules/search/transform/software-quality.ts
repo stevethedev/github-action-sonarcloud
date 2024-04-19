@@ -14,6 +14,10 @@ export {
   isSoftwareQuality as isRawSoftwareQuality,
 };
 export const parseSoftwareQuality = (value: unknown): SoftwareQuality => {
-  assertType(value, isSoftwareQuality, (x) => `Invalid software quality: ${x}`);
+  assertType(
+    value,
+    isSoftwareQuality,
+    (x) => `Invalid software quality: ${JSON.stringify(x)}`,
+  );
   return value;
 };

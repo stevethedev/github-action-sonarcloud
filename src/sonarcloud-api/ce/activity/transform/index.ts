@@ -1,28 +1,28 @@
 import assertType from "@std-types/assert-type";
+import { getIsArray } from "@std-types/is-array";
 import { getIsOneOf } from "@std-types/is-one-of";
-import { type Shape, getIsShapedLike } from "@std-types/is-shaped-like";
+import { getIsShapedLike, type Shape } from "@std-types/is-shaped-like";
 import {
-  type Organization,
-  type RawOrganization,
   isOrganization,
   isRawOrganization,
+  type Organization,
   parseOrganization,
+  type RawOrganization,
 } from "./organization";
 import {
-  type PullRequestTask,
-  type RawPullRequestTask,
-  isPullRequestTask,
-  isRawPullRequestTask,
-  parsePullRequestTask,
-} from "./task/pull-request";
-import {
   type BranchTask,
-  type RawBranchTask,
   isBranchTask,
   isRawBranchTask,
   parseBranchTask,
+  type RawBranchTask,
 } from "./task/branch";
-import { getIsArray } from "@std-types/is-array";
+import {
+  isPullRequestTask,
+  isRawPullRequestTask,
+  parsePullRequestTask,
+  type PullRequestTask,
+  type RawPullRequestTask,
+} from "./task/pull-request";
 
 export interface RawResult {
   organizations: RawOrganization[];
@@ -49,7 +49,7 @@ const resultShape: Shape<Result> = {
 export const isResult = getIsShapedLike<Result>(resultShape);
 
 export const transform = (data: unknown): Result => {
-  assertType(data, isRawResult);
+  assertType(data, isRawResult, (x) => `Invalid result: ${JSON.stringify(x)}`);
 
   return {
     organizations: data.organizations.map(parseOrganization),

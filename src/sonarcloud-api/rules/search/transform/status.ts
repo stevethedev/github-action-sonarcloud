@@ -12,6 +12,6 @@ export const isStatus = getIsEnum(Status);
 
 export { Status as RawStatus, isStatus as isRawStatus };
 export const parseStatus = (value: unknown): Status => {
-  assertType(value, isStatus, (x) => `Invalid status: ${x}`);
+  assertType(value, isStatus, (x) => `Invalid status: ${JSON.stringify(x)}`);
   return value;
 };
