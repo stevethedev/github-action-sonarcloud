@@ -88,6 +88,12 @@ export const main = async (
       ...hotspots.map((hotspot) => hotspot.rule).filter(isString),
     ]);
 
+    console.log({
+      issues,
+      hotspots,
+      rules,
+    });
+
     await decorateFiles({
       comment,
       prFiles,
