@@ -1,10 +1,7 @@
 import { type CommentManager } from "@/github/comment";
 import { type PrFileRecord } from "@/github/pr-files";
+import { type Rule } from "@/main/get-rules";
 import { type IssueWithUrl } from "@/main/validate-issues";
-import { type Rule } from "@/sonarcloud-api/rules/search/transform/rule";
-import { Severity } from "@/sonarcloud-api/rules/search/transform/severity";
-import { Status } from "@/sonarcloud-api/rules/search/transform/status";
-import { Type } from "@/sonarcloud-api/rules/search/transform/type";
 import { stripIndent } from "common-tags";
 import { prepareComment, type PrepareCommentOptions } from "./decorate-files";
 
@@ -23,21 +20,14 @@ describe("prepareComment", () => {
 
     const rules: Partial<Record<string, Rule>> = {
       foo: {
-        key: "foo",
         name: "foo",
-        lang: "foo",
-        langName: "foo",
-        sysTags: [],
-        tags: [],
-        params: [],
-        type: Type.CodeSmell,
-        htmlDesc: "foo",
-        mdDesc: "foo",
-        severity: Severity.Major,
-        status: Status.Beta,
-        scope: "foo",
-        isExternal: false,
-        isTemplate: false,
+        description: {
+          introduction: null,
+          resources: null,
+          rootCause: null,
+          howToFix: null,
+        },
+        impacts: [],
       },
     };
 

@@ -1,7 +1,6 @@
 import { h2, h3 } from "@/comment/header";
+import { type Rule } from "@/main/get-rules";
 import { type IssueWithUrl } from "@/main/validate-issues";
-import { type Rule } from "@/sonarcloud-api/rules/search/transform/rule";
-import toTitleCase from "@/types/string/to-title-case";
 import { html, stripIndent } from "common-tags";
 
 export interface Props {
@@ -17,7 +16,7 @@ export default ({ issue, rule }: Props): string => {
     
     ${rule.name}
     
-    ${introduction(rule)}
+    ${rule.description.introduction ?? "<!-- No introduction -->"}
     
     ${impacts(rule)}
     
@@ -31,21 +30,8 @@ export default ({ issue, rule }: Props): string => {
   `;
 };
 
-const introduction = (rule: Rule) => {
-  const found =
-    rule.descriptionSections?.find(
-      (section) => section.key === "introduction",
-    ) ?? null;
-
-  return found?.content ?? "<!-- No introduction -->";
-};
-
 const rootCause = (rule: Rule) => {
-  const found =
-    rule.descriptionSections?.find((section) => section.key === "root_cause") ??
-    null;
-
-  if (!found) {
+  if (!rule.description.rootCause) {
     return "<!-- No root cause -->";
   }
 
@@ -53,17 +39,13 @@ const rootCause = (rule: Rule) => {
     <details>
     <summary>${h3({ html: true, text: "Why is this an issue?" })}</summary>
     
-    ${found.content}
+    ${rule.description.rootCause}
     </details>
   `;
 };
 
 const howToFixIt = (rule: Rule) => {
-  const found =
-    rule.descriptionSections?.find((section) => section.key === "how_to_fix") ??
-    null;
-
-  if (!found) {
+  if (!rule.description.howToFix) {
     return "<!-- No fix -->";
   }
 
@@ -71,22 +53,18 @@ const howToFixIt = (rule: Rule) => {
     <details>
     <summary>${h3({ html: true, text: "How can I fix it?" })}</summary>
     
-    ${found.content}
+    ${rule.description.howToFix}
     </details>
   `;
 };
 
 const resources = (rule: Rule) => {
-  const found =
-    rule.descriptionSections?.find((section) => section.key === "resources") ??
-    null;
-
-  if (!found) {
+  if (!rule.description.resources) {
     return "<!-- No resources -->";
   }
 
   // Increase all headings by one level
-  const content = found.content
+  const content = rule.description.resources
     .replace(
       /<h(\d)([^>]*)>/gi,
       (_, level, rest) => `<h${parseInt(level) + 1}${rest}>`,
@@ -110,8 +88,8 @@ const impacts = ({ impacts }: Rule) => {
   return stripIndent`
     ${h3({ text: "Software qualities impacted:" })}
     
-    ${impacts.map((impact) => {
-      return `* (${toTitleCase(impact.severity)}) ${toTitleCase(impact.softwareQuality)}`;
+    ${impacts.map(({ metric, severity }) => {
+      return `* (${severity}) ${metric}`;
     })}
   `;
 };

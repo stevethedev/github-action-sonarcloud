@@ -3,11 +3,14 @@ import { TaskStatus } from "@/comment/body";
 import { type CommentManager } from "@/github/comment";
 import { type PrFiles } from "@/github/pr-files";
 import decorateFiles from "@/main/decorate-files";
+import getHotspots from "@/main/get-hotspots";
+import RuleGetter from "@/main/get-rules";
 import { validateIssues } from "@/main/validate-issues";
 import { validatePullRequest } from "@/main/validate-pull-request";
 import { validateTaskComplete } from "@/main/validate-task-complete";
 import { requestFactory } from "@/request";
 import isNumber from "@std-types/is-number";
+import isString from "@std-types/is-string";
 import { validateCredentials } from "./validate-credentials";
 
 export interface MainOptions {
@@ -38,6 +41,7 @@ export const main = async (
     token: sonarToken,
     fetch,
   });
+  const ruleGetter = new RuleGetter(sonarRequest, sonarOrganization);
 
   const props: Props = {
     isAuthenticated: false,
@@ -74,12 +78,22 @@ export const main = async (
       projectKey,
       pullRequest,
     }));
+    const hotspots = await getHotspots(sonarRequest, {
+      projectKey,
+      pullRequest,
+    });
 
-    await decorateFiles(sonarRequest, {
+    const rules = await ruleGetter.getRules([
+      ...issues.map((issue) => issue.rule).filter(isString),
+      ...hotspots.map((hotspot) => hotspot.rule).filter(isString),
+    ]);
+
+    await decorateFiles({
       comment,
       prFiles,
       issues,
-      sonarOrganization,
+      hotspots,
+      rules,
     });
   }
 
