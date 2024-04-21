@@ -26769,6 +26769,11 @@ var main = async ({ fetch, comment, pullRequest, prFiles }, { sonarToken, sonarU
       ...issues.map((issue) => issue.rule).filter(import_is_string25.default),
       ...hotspots.map((hotspot) => hotspot.rule).filter(import_is_string25.default)
     ]);
+    console.log({
+      issues,
+      hotspots,
+      rules
+    });
     await decorate_files_default({
       comment,
       prFiles,
