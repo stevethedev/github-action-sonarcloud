@@ -76,13 +76,15 @@ const prepareHotspotComment = ({
 export const prepareComment =
   ({ files, rules, comment }: PrepareCommentOptions) =>
   async (issue: IssueWithUrl): Promise<void> => {
-    const file = files.find((file) => file.filename === issue.component);
+    const file = files.find((file) => file.filename === issue.file);
     if (!file?.commitId || !issue?.rule) {
+      console.info("No file or rule found for issue", { issue, file });
       return;
     }
 
     const rule = rules[issue.rule];
     if (!rule) {
+      console.info("No rule found for issue", { issue });
       return;
     }
 
