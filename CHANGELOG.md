@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.6.0
+
+### Minor Changes
+
+- 43a2877: Add security hotspots reports
+
 ## 0.5.3
 
 ### Patch Changes
