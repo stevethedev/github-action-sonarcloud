@@ -95,6 +95,8 @@ export const main = async (
       hotspots,
       rules,
     });
+
+    // eslint-disable-next-line no-debugger
     debugger;
   }
 
