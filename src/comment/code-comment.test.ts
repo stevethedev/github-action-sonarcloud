@@ -306,6 +306,8 @@ describe("codeComment", () => {
       </ul>
       </section>
       </details>
+      
+      <!-- code-comment:test key -->
     `;
 
     const rule = {
@@ -341,6 +343,7 @@ describe("codeComment", () => {
       "";
 
     const props: Props = {
+      key: "test key",
       title: hotspot.message,
       brief: rule.name,
       sections: [

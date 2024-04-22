@@ -2,6 +2,7 @@ import { h2 } from "@/comment/header";
 import { html, stripIndent } from "common-tags";
 
 export interface Props {
+  key: string;
   title: string;
   brief?: string;
   details?: string | null;
@@ -9,7 +10,7 @@ export interface Props {
   sections: Array<{ title: string; content: string | null }>;
 }
 
-export default ({ title, brief, sections, details }: Props): string => {
+export default ({ key, title, brief, sections, details }: Props): string => {
   return stripIndent(html)`
     ${h2({ html: true, text: title })}
     
@@ -17,6 +18,8 @@ export default ({ title, brief, sections, details }: Props): string => {
     ${details ? `<p>${details}</p>` : "<!-- No details -->"}
     
     ${sections.map(accordion).join("\n")}
+    
+    <!-- code-comment:${key} -->
   `;
 };
 

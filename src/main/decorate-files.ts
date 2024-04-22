@@ -34,7 +34,7 @@ export interface PrepareCommentOptions {
   rules: Partial<Record<string, Rule>>;
 }
 
-const prepareHotspotComment = ({
+export const prepareHotspotComment = ({
   files,
   rules,
   comment,
@@ -58,6 +58,7 @@ const prepareHotspotComment = ({
     };
 
     const body = codeComment({
+      key: hotspot.key,
       title: hotspot.message ?? "Sonar Hot Spot",
       brief: rule.name,
       details: rule.description.introduction,

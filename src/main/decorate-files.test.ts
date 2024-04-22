@@ -3,7 +3,11 @@ import { type PrFileRecord } from "@/github/pr-files";
 import { type Rule } from "@/main/get-rules";
 import { type IssueWithUrl } from "@/main/validate-issues";
 import { stripIndent } from "common-tags";
-import { prepareComment, type PrepareCommentOptions } from "./decorate-files";
+import {
+  prepareComment,
+  type PrepareCommentOptions,
+  prepareHotspotComment,
+} from "./decorate-files";
 
 describe("prepareComment", () => {
   it("should decorate the files", async () => {
@@ -69,6 +73,76 @@ describe("prepareComment", () => {
         <!-- No resources -->
         
         <!-- issue-comment:foo -->
+    `;
+
+    const expectedOptions = {
+      commit: "1234",
+      file: "src/index.ts",
+      issueKey: "foo",
+      line: 1,
+    };
+
+    expect(comment.post).toHaveBeenCalledWith(expectedText, expectedOptions);
+  });
+});
+
+describe("prepareHotspotComment", () => {
+  it("should decorate the files", async () => {
+    const files: PrFileRecord[] = [
+      {
+        filename: "src/index.ts",
+        commitId: "1234",
+      },
+      {
+        filename: "src/app.ts",
+        commitId: "5678",
+      },
+    ];
+
+    const rules: Partial<Record<string, Rule>> = {
+      foo: {
+        name: "foo",
+        description: {
+          introduction: null,
+          resources: null,
+          rootCause: null,
+          howToFix: null,
+        },
+        impacts: [],
+      },
+    };
+
+    const comment = {
+      post: jest.fn(),
+    } as unknown as CommentManager;
+
+    const options: PrepareCommentOptions = {
+      files,
+      rules,
+      comment,
+    };
+
+    const hotspot = {
+      key: "foo",
+      file: "src/index.ts",
+      line: 1,
+      rule: "foo",
+      message: "hotspot message",
+    };
+
+    await prepareHotspotComment(options)(hotspot);
+
+    const expectedText = stripIndent`
+      <h2>hotspot message</h2>
+      
+      <p>foo</p>
+      <!-- No details -->
+      
+      <!-- No Why is this an issue? -->
+      <!-- No How can I fix it? -->
+      <!-- No Additional Resources -->
+      
+      <!-- code-comment:foo -->
     `;
 
     const expectedOptions = {
