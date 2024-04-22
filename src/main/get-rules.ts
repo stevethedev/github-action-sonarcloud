@@ -42,7 +42,9 @@ export default class RuleGetter {
       });
     }
     return Object.fromEntries(
-      ruleKeys.map((key) => [key, this.cache.get(key)!]),
+      ruleKeys
+        .map((key) => [key, this.cache.get(key)])
+        .filter(([, rule]) => rule),
     );
   }
 }
@@ -101,10 +103,10 @@ const parseDescription = (
             (_, level, rest) => `</h${parseInt(level) + 1}${rest}>`,
           );
         break;
-      case "rootCause":
+      case "root_cause":
         description.rootCause = section.content;
         break;
-      case "howToFix":
+      case "how_to_fix":
         description.howToFix = section.content;
         break;
     }
