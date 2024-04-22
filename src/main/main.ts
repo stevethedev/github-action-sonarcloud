@@ -11,7 +11,13 @@ import { validateTaskComplete } from "@/main/validate-task-complete";
 import { requestFactory } from "@/request";
 import isNumber from "@std-types/is-number";
 import isString from "@std-types/is-string";
+
+import { createHash } from "crypto";
 import { validateCredentials } from "./validate-credentials";
+
+export const insecureFunction = (data: string) => {
+  return createHash("md5").update(data).digest("hex");
+};
 
 export interface MainOptions {
   commentId?: number;
@@ -95,9 +101,6 @@ export const main = async (
       hotspots,
       rules,
     });
-
-    // eslint-disable-next-line no-debugger
-    debugger;
   }
 
   if ([TaskStatus.Unknown, TaskStatus.Complete].includes(props.taskStatus)) {
