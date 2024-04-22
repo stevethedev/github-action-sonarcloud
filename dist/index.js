@@ -25457,12 +25457,14 @@ var prepareHotspotComment = ({
   };
 };
 var prepareComment = ({ files, rules, comment }) => async (issue) => {
-  const file = files.find((file2) => file2.filename === issue.component);
+  const file = files.find((file2) => file2.filename === issue.file);
   if (!file?.commitId || !issue?.rule) {
+    console.info("No file or rule found for issue", { issue, file });
     return;
   }
   const rule = rules[issue.rule];
   if (!rule) {
+    console.info("No rule found for issue", { issue });
     return;
   }
   const options = {
@@ -26769,11 +26771,6 @@ var main = async ({ fetch, comment, pullRequest, prFiles }, { sonarToken, sonarU
       ...issues.map((issue) => issue.rule).filter(import_is_string25.default),
       ...hotspots.map((hotspot) => hotspot.rule).filter(import_is_string25.default)
     ]);
-    console.log({
-      issues,
-      hotspots,
-      rules
-    });
     await decorate_files_default({
       comment,
       prFiles,
