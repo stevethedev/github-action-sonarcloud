@@ -95,6 +95,7 @@ export const main = async (
       hotspots,
       rules,
     });
+    debugger;
   }
 
   if ([TaskStatus.Unknown, TaskStatus.Complete].includes(props.taskStatus)) {
