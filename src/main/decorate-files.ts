@@ -76,7 +76,7 @@ const prepareHotspotComment = ({
 export const prepareComment =
   ({ files, rules, comment }: PrepareCommentOptions) =>
   async (issue: IssueWithUrl): Promise<void> => {
-    const file = files.find((file) => file.filename === issue.component);
+    const file = files.find((file) => file.filename === issue.file);
     if (!file?.commitId || !issue?.rule) {
       return;
     }
