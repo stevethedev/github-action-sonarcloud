@@ -43,7 +43,7 @@ describe("prepareComment", () => {
 
     const issue: IssueWithUrl = {
       key: "foo",
-      component: "src/index.ts",
+      file: "src/index.ts",
       line: 1,
       rule: "foo",
       url: "foo",
