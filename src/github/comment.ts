@@ -109,7 +109,7 @@ export class CommentManager {
     });
 
     const comment = data.find((comment) =>
-      comment.body?.includes(`<!-- issue-comment:${key} -->`),
+      comment.body?.includes(`<!-- code-comment:${key} -->`),
     );
 
     return comment?.id;
