@@ -1,5 +1,11 @@
 # github-action-sonarcloud
 
+## 0.6.1
+
+### Patch Changes
+
+- 9bdcc8d: Fix a bug where new code-comments are generated for each commit.
+
 ## 0.6.0
 
 ### Minor Changes
