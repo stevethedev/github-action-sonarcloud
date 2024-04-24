@@ -205,7 +205,7 @@ describe("CommentManager", () => {
         data: [
           {
             id: 12345,
-            body: `My body text <!-- issue-comment:my-key -->`,
+            body: `My body text <!-- code-comment:my-key -->`,
           },
         ],
       } as unknown as ReturnType<typeof octokit.rest.pulls.listReviewComments>);
